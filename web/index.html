@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Antrean Saat Ini — QueueApp</title>
+    <meta
+      name="description"
+      content="Melihat nomor antrean yang sedang dipanggil dan jumlah antrean 
+yang masih menunggu."
+    />
+  </head>
+  <body>
+    <a href="#konten-utama">Lewati ke konten utama</a>
+    <header>
+      <p><strong>QueueApp</strong></p>
+      <nav aria-label="Navigasi utama">
+        <ul>
+          <li><a href="index.html" aria-current="page">Antrean Saat Ini</a></li>
+          <li><a href="take-queue.html">Ambil Nomor</a></li>
+          <li><a href="admin-login.html">Masuk sebagai Petugas</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main id="konten-utama">
+      <h1>Antrean Saat Ini</h1>
+      <section aria-labelledby="judul-dipanggil">
+        <h2 id="judul-dipanggil">Sedang Dipanggil</h2>
+        <p><strong>A003</strong></p>
+        <p>Dipanggil pada pukul <time datetime="09:15">09.15</time>.</p>
+      </section>
+      <section aria-labelledby="judul-menunggu">
+        <h2 id="judul-menunggu">Menunggu</h2>
+        <p><strong>2</strong> antrean masih menunggu.</p>
+        <ul>
+          <li>A004</li>
+          <li>A005</li>
+        </ul>
+      </section>
+      <section aria-labelledby="judul-nomor-saya">
+        <h2 id="judul-nomor-saya">Nomor Antrean Anda</h2>
+        <p>Anda belum mengambil nomor antrean.</p>
+        <p><a href="take-queue.html">Ambil nomor antrean</a></p>
+      </section>
+      <section aria-labelledby="judul-keterangan">
+        <h2 id="judul-keterangan">Keterangan Status</h2>
+        <dl>
+          <dt>WAITING</dt>
+          <dd>Menunggu dipanggil.</dd>
+          <dt>CALLED</dt>
+          <dd>Sedang dipanggil. Silakan menuju loket.</dd>
+          <dt>COMPLETED</dt>
+          <dd>Sudah selesai dilayani.</dd>
+        </dl>
+      </section>
+    </main>
+    <footer>
+      <p>
+        QueueApp — reference implementation mata kuliah Web and Mobile
+        Technology (BD323).
+      </p>
+      <p>
+        Minggu 03: struktur halaman dengan HTML. Angka pada halaman ini masih
+        tetap dan belum berasal dari data sungguhan.
+      </p>
+    </footer>
+  </body>
+</html>
