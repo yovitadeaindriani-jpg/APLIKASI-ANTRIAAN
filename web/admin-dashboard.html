@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Petugas — QueueApp</title>
+<meta name="description" content="Daftar antrean dan pengelolaannya untuk petugas.">
+</head>
+<body>
+<a href="#konten-utama">Lewati ke konten utama</a>
+<header>
+<p><strong>QueueApp</strong></p>
+<nav aria-label="Navigasi utama">
+<ul>
+<li><a href="index.html">Antrean Saat Ini</a></li>
+<li><a href="take-queue.html">Ambil Nomor</a></li>
+<li><a href="admin-dashboard.html" aria-current="page">Dashboard Petugas</a></li>
+<li><a href="admin-login.html">Keluar</a></li>
+</ul>
+</nav>
+</header>
+<main id="konten-utama">
+<h1>Dashboard Petugas</h1>
+ <section aria-labelledby="judul-ringkasan">
+      <h2 id="judul-ringkasan">Ringkasan Hari Ini</h2>
+      <dl>
+        <dt>Sedang dipanggil</dt>
+        <dd>A003</dd>
+        <dt>Menunggu</dt>
+        <dd>2</dd>
+        <dt>Selesai</dt>
+        <dd>2</dd>
+      </dl>
+    </section>
+    <section aria-labelledby="judul-aksi">
+      <h2 id="judul-aksi">Aksi</h2>
+      <!--
+        Aturannya tetap: yang dipanggil selalu antrean WAITING tertua.
+        Petugas tidak memilih sendiri. Lihat FR-06 dan docs/architecture.md 6.2.
+        Minggu 11 : tombol ini mengirim POST /api/queues/next
+      -->
+      <form action="#daftar-antrean" method="post">
+        <button type="submit">Panggil Antrean Berikutnya</button>
+      </form>
+      <p>Antrean berikutnya yang akan dipanggil: <strong>A004</strong>.</p>
+    </section>
+     <section id="daftar-antrean" aria-labelledby="judul-daftar">
+      <h2 id="judul-daftar">Daftar Antrean</h2>
+      <table>
+        <caption>Antrean hari ini, diurutkan dari yang paling awal dibuat.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Nomor</th>
+            <th scope="col">Status</th>
+            <th scope="col">Dibuat</th>
+            <th scope="col">Dipanggil</th>
+            <th scope="col">Selesai</th>
+            <th scope="col">Aksi</th>
+          </tr>
+        </thead>
+         <tr>
+            <th scope="row">A001</th>
+            <td>COMPLETED</td>
+            <td><time datetime="2026-09-03T08:30">08.30</time></td>
+            <td><time datetime="2026-09-03T08:32">08.32</time></td>
+            <td><time datetime="2026-09-03T08:41">08.41</time></td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <th scope="row">A002</th>
+            <td>COMPLETED</td>
+            <td><time datetime="2026-09-03T08:47">08.47</time></td>
+            <td><time datetime="2026-09-03T08:55">08.55</time></td>
+            <td><time datetime="2026-09-03T09:06">09.06</time></td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <th scope="row">A003</th>
+            <td>CALLED</td>
+            <td><time datetime="2026-09-03T09:02">09.02</time></td>
+            <td><time datetime="2026-09-03T09:15">09.15</time></td>
+            <td>—</td>
+            <td>
+              <!-- Minggu 11: POST /api/queues/3/complete -->
+              <form action="#daftar-antrean" method="post">
+                <button type="submit">Selesaikan A003</button>
+              </form>
+            </td>
+          </tr>
+<tr>
+            <th scope="row">A004</th>
+            <td>WAITING</td>
+            <td><time datetime="2026-09-03T09:10">09.10</time></td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <th scope="row">A005</th>
+            <td>WAITING</td>
+            <td><time datetime="2026-09-03T09:18">09.18</time></td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <footer>
+    <p>QueueApp — reference implementation mata kuliah Web and Mobile Technology (BD323).</p>
+    <p>
+      Minggu 03: isi tabel masih tetap dan tombolnya belum melakukan apa pun.
+      Data sungguhan masuk pada Minggu 10 dan Minggu 11.
+    </p>
+  </footer>
+</body>
+</html>
