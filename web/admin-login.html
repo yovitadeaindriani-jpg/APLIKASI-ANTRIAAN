@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Masuk sebagai Petugas — QueueApp</title>
+    <meta name="description" content="Halaman masuk untuk petugas QueueApp." />
+  </head>
+  <body>
+    <a href="#konten-utama">Lewati ke konten utama</a>
+    <main id="konten-utama">
+      <h1>Masuk sebagai Petugas</h1>
+      <header>
+        <p><strong>QueueApp</strong></p>
+        <nav aria-label="Navigasi utama">
+          <ul>
+            <li><a href="index.html">Antrean Saat Ini</a></li>
+            <li><a href="take-queue.html">Ambil Nomor</a></li>
+            <li>
+              <a href="admin-login.html" aria-current="page"
+                >Masuk sebagai Petugas</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <p>Halaman ini hanya untuk petugas. Pengunjung tidak perlu masuk.</p>
+
+      <!--
+Minggu 13 : form ini mengirim POST /api/auth/login, password diverifikasi
+terhadap hash, lalu token diterbitkan.
+Sampai saat itu, form belum melakukan apa pun.
+-->
+
+      <form action="admin-dashboard.html" method="post">
+        <fieldset>
+          <legend>Kredensial petugas</legend>
+          <p>
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              autocomplete="username"
+              required
+              aria-describedby="bantuan-email"
+            />
+            <span id="bantuan-email">Contoh: petugas@queueapp.test</span>
+          </p>
+          <p>
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="current-password"
+              required
+            />
+          </p>
+          <p>
+            <button type="submit">Masuk</button>
+          </p>
+        </fieldset>
+      </form>
+
+      <!--
+Wadah pesan kesalahan. Dikosongkan sampai ada kesalahan sungguhan.
+role="alert" membuat pembaca layar mengumumkan isinya begitu terisi,
+tanpa memindahkan fokus pengguna.-->
+
+      <section aria-labelledby="judul-kesalahan">
+        <h2 id="judul-kesalahan">Pesan Kesalahan</h2>
+        <p role="alert"></p>
+        <p>
+          Bila kredensial salah, sistem tidak memberi tahu bagian mana yang
+          keliru. Menyebutkan "email tidak terdaftar" akan memberitahu penyerang
+          bahwa email lainnya terdaftar.
+        </p>
+      </section>
+    </main>
+    <footer>
+      <p>
+        QueueApp — reference implementation mata kuliah Web and Mobile
+        Technology (BD323).
+      </p>
+      <p>
+        Minggu 03: form ini belum memeriksa apa pun dan langsung menuju halaman
+        dashboard. Autentikasi sungguhan ditambahkan pada Minggu 13.
+      </p>
+    </footer>
+  </body>
+</html>
