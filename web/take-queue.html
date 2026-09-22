@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ambil Nomor Antrean — QueueApp</title>
+    <meta name="description" content="Mengambil nomor antrean baru." />
+  </head>
+  <body>
+    <section aria-labelledby="judul-form">
+      <h2 id="judul-form">Ambil Nomor</h2>
+      <!--
+Nomor antrean ditentukan oleh server, bukan oleh halaman ini.
+Lihat docs/architecture.md 6.1 — bila client yang menentukan, dua
+pengunjung yang menekan tombol bersamaan bisa mendapat nomor sama.
+Minggu 05 : tombol ini ditangani JavaScript, nomor disimpan di localStorage
+Minggu 11 : form ini mengirim POST /api/queues
+-->
+      <form action="#konfirmasi" method="post">
+        <fieldset>
+          <legend>Konfirmasi pengambilan antrean</legend>
+          <p>
+            Nomor antrean akan dibuatkan untuk Anda. Anda tidak perlu mengisi
+            data apa pun.
+          </p>
+          <button type="submit">Ambil Nomor Antrean</button>
+        </fieldset>
+      </form>
+    </section>
+    <section id="konfirmasi" aria-labelledby="judul-konfirmasi">
+      <h2 id="judul-konfirmasi">Nomor Antrean Anda</h2>
+      <p>Belum ada nomor yang diambil dari perangkat ini.</p>
+      <p><a href="index.html">Lihat antrean saat ini</a></p>
+    </section>
+    <section aria-labelledby="judul-langkah">
+      <h2 id="judul-langkah">Selanjutnya</h2>
+      <ol>
+        <li>Simpan atau catat nomor antrean Anda.</li>
+        <li>Perhatikan halaman <a href="index.html">Antrean Saat Ini</a>.</li>
+        <li>Menuju loket ketika nomor Anda dipanggil.</li>
+      </ol>
+    </section>
+  </body>
+</html>
