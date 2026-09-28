@@ -11,9 +11,8 @@ USER PERSONA SEDERHANA
 3.	Ingin mengetahui status antrian
 4.	Ingin mengatur loket atau layanan yang tersedia
 5.	Ingin mengetahui jumlah dan kondisi antrian
+CUSTOMER — 5 User Story
 
-USER STORY QUEUEAPP
-•	customer
 1. Mendapatkan nomor antrian
 
 Sebagai customer, saya ingin mengambil nomor antrian agar saya dapat menunggu giliran pelayanan.
