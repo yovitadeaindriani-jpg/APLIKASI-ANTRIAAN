@@ -205,3 +205,150 @@ header nav a[aria-current="page"] {
   text-decoration: none;
   border-bottom: 3px solid var(--warna-utama);
 }
+
+/* =============================================================================
+6. TAMPILAN ANTREAN
+========================================================================== */
+/* Setiap section menjadi kartu dengan latar sendiri, sehingga batas antar
+bagian terlihat tanpa perlu garis pemisah tambahan.
+Form yang berdiri langsung di bawah main — seperti form login —
+mendapat perlakuan yang sama, supaya tidak ada satu blok yang tampak
+melayang di luar sistem kartu. */
+main > section,
+main > form {
+  background-color: var(--warna-permukaan);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--lengkung);
+  padding: var(--ruang-4) var(--ruang-3);
+}
+main > form {
+  margin-top: var(--ruang-5);
+}
+/* Paragraf pengantar tepat di bawah judul halaman perlu jarak sendiri;
+margin bawaannya sudah dinolkan pada reset. */
+main > p {
+  margin-top: var(--ruang-3);
+}
+main > section > * + * {
+  margin-top: var(--ruang-3);
+}
+
+/* Nomor yang sedang dipanggil adalah hal pertama yang dicari pengunjung,
+jadi dibuat paling besar di halaman — lebih besar daripada h1 sekalipun.
+Ukuran menandakan kepentingan; itu tugas CSS, bukan tugas HTML. */
+.nomor-antrean {
+  font-size: var(--teks-raksasa);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--warna-utama);
+  /* tabular-nums menjaga lebar tiap angka tetap sama, sehingga nomor
+tidak bergeser-geser ketika berubah nanti */
+  font-variant-numeric: tabular-nums;
+}
+/* Keadaan kosong tidak perlu sebesar dan sementereng nomor sungguhan. */
+.nomor-antrean--kosong {
+  font-size: var(--teks-dasar);
+  color: var(--warna-teks-lembut);
+}
+/* Daftar nomor menunggu ditampilkan berjajar sebagai potongan kecil,
+bukan sebagai daftar menurun yang memanjangkan halaman. */
+.daftar-nomor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ruang-2);
+}
+.daftar-nomor li {
+  padding: var(--ruang-1) var(--ruang-3);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--lengkung);
+  background-color: var(--warna-latar);
+  font-variant-numeric: tabular-nums;
+}
+/* Daftar definisi: istilah dan penjelasannya dijajarkan agar mudah dipindai.
+Di layar sempit tetap menurun karena flex-wrap. */
+dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ruang-2) var(--ruang-3);
+}
+dt {
+  flex-basis: 100%;
+  font-weight: 700;
+  font-size: var(--teks-kecil);
+  letter-spacing: 0.04em;
+  color: var(--warna-teks-lembut);
+}
+dd {
+  flex-basis: 100%;
+}
+/* Langkah bernomor pada halaman Ambil Nomor. list-style dimatikan pada
+reset, jadi penomorannya dikembalikan di sini secara sengaja. */
+main ol {
+  list-style: decimal;
+  padding-left: var(--ruang-4);
+}
+main ol li + li {
+  margin-top: var(--ruang-2);
+}
+/* Tombol -------------------------------------------------------------------
+Bentuk dasarnya di sini; keadaan fokus, nonaktif, dan galat menyusul
+pada bagian Form. */
+
+button {
+  display: inline-block;
+  padding: var(--ruang-2) var(--ruang-4);
+  /* 2.75rem ≈ 44px, ukuran target sentuh minimal yang nyaman di ponsel */
+  min-height: 2.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--lengkung);
+  background-color: var(--warna-utama);
+  color: var(--warna-permukaan);
+  font-weight: 600;
+  cursor: pointer;
+}
+button:hover {
+  background-color: var(--warna-utama-gelap);
+}
+
+/* =============================================================================
+7. DASHBOARD PETUGAS
+========================================================================== */
+/* Tabel lebar tidak boleh mendorong lebar halaman. Pembungkus inilah yang
+digulir, bukan seluruh badan halaman. */
+.tabel-gulir {
+  overflow-x: auto;
+  /* Garis fokus perlu ruang agar tidak terpotong saat area digulir
+dengan keyboard. */
+  padding: 2px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  /* Mencegah kolom menyempit sampai isinya terpelintir; bila tidak muat,
+pembungkus di atas yang menggulir. */
+  min-width: 40rem;
+}
+th,
+td {
+  padding: var(--ruang-2) var(--ruang-3);
+  text-align: left;
+  border-bottom: 1px solid var(--warna-garis);
+  vertical-align: top;
+}
+thead th {
+  background-color: var(--warna-latar);
+  font-size: var(--teks-kecil);
+  letter-spacing: 0.04em;
+  border-bottom-width: 2px;
+  white-space: nowrap;
+}
+/* Nomor antrean adalah kepala baris — ditandai th scope="row" sejak
+Minggu 03, jadi cukup dipilih lewat penandanya. */
+tbody th[scope="row"] {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+td time {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
