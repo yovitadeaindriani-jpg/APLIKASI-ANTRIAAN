@@ -328,6 +328,17 @@ table {
 pembungkus di atas yang menggulir. */
   min-width: 40rem;
 }
+caption {
+  text-align: left;
+  color: var(--warna-teks-lembut);
+  font-size: var(--teks-kecil);
+  margin-bottom: var(--ruang-2);
+  /* Caption ikut selebar tabel, sehingga di layar sempit ia tergulir
+keluar bersama kolom-kolom kanan. Dikunci ke tepi kiri area gulir
+agar tetap terbaca tanpa perlu menggulir lebih dulu. */
+  position: sticky;
+  left: 0;
+}
 th,
 td {
   padding: var(--ruang-2) var(--ruang-3);
@@ -351,4 +362,216 @@ tbody th[scope="row"] {
 td time {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+/* Status diberi warna lewat selektor atribut, memakai data-status yang
+nilainya sama persis dengan status di model data. Tidak perlu class
+tambahan, dan tidak mungkin meleset dari daftar status yang sah. */
+td[data-status] {
+  font-size: var(--teks-kecil);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+td[data-status="WAITING"] {
+  color: #7a4600;
+}
+td[data-status="CALLED"] {
+  color: #0e3465;
+}
+td[data-status="COMPLETED"] {
+  color: #14562f;
+}
+/* Warna saja tidak boleh menjadi satu-satunya pembeda — pengguna dengan
+buta warna tidak akan menangkapnya. Karena itu setiap status juga
+diberi penanda bentuk di depannya. */
+td[data-status]::before {
+  margin-right: var(--ruang-1);
+}
+td[data-status="WAITING"]::before {
+  content: "○";
+}
+td[data-status="CALLED"]::before {
+  content: "●";
+}
+td[data-status="COMPLETED"]::before {
+  content: "✓";
+}
+/* Tombol di dalam baris tabel lebih kecil daripada tombol utama. */
+td form {
+  margin: 0;
+}
+td button {
+  padding: var(--ruang-1) var(--ruang-3);
+  min-height: 2.25rem;
+  font-size: var(--teks-kecil);
+  white-space: nowrap;
+}
+/* Ringkasan hari ini memakai tata letak dl yang sama dengan halaman lain —
+menurun di layar sempit, dua kolom mulai tablet. Angkanya saja yang
+ditebalkan.
+Percobaan pertama membuat istilah dan nilainya berjajar bebas dengan
+flex-basis: auto. Di layar 390px hasilnya justru berhimpitan sehingga
+sulit dilihat pasangan mana milik mana. */
+section[aria-labelledby="judul-ringkasan"] dd {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+/* =============================================================================
+8. FORM DAN KEADAANNYA
+========================================================================== */
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+legend {
+  padding: 0;
+  font-weight: 700;
+  font-size: var(--teks-sedang);
+  margin-bottom: var(--ruang-3);
+}
+form p + p {
+  margin-top: var(--ruang-3);
+}
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: var(--ruang-1);
+}
+input {
+  display: block;
+  width: 100%;
+  max-width: 24rem;
+  min-height: 2.75rem;
+  padding: var(--ruang-2) var(--ruang-3);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--lengkung);
+  background-color: var(--warna-permukaan);
+}
+/* Teks bantuan berada di bawah input dan terhubung lewat aria-describedby
+sejak Minggu 03, jadi tetap terbaca pembaca layar meski tampil kecil. */
+.bantuan {
+  display: block;
+  margin-top: var(--ruang-1);
+  font-size: var(--teks-kecil);
+  color: var(--warna-teks-lembut);
+}
+/* Keadaan: fokus ------------------------------------------------------------
+Garis fokus global sudah diatur pada bagian 3. Di sini border input ikut
+menggelap agar batas kolom yang aktif jelas, bukan hanya garis luarnya. */
+input:focus-visible {
+  border-color: var(--warna-utama);
+}
+/* Keadaan: galat ------------------------------------------------------------
+:user-invalid hanya menyala setelah pengguna benar-benar berinteraksi
+dengan kolom dan isinya masih tidak sah — berbeda dari :invalid yang
+menyala sejak halaman dimuat dan memerahkan form yang belum disentuh.
+Aturan ini bekerja tanpa satu baris JavaScript, memanfaatkan required
+dan type="email" yang sudah dipasang sejak Minggu 03.
+aria-invalid="true" disiapkan untuk kesalahan dari server pada Minggu 13. */
+input:user-invalid,
+input[aria-invalid="true"] {
+  border-color: #a4262c;
+  border-width: 2px;
+}
+/* Warna saja tidak cukup sebagai penanda galat. Latar yang sedikit
+berbeda memberi petunjuk kedua. */
+input:user-invalid {
+  background-color: #fdf5f5;
+}
+.pesan-galat {
+  padding: var(--ruang-2) var(--ruang-3);
+  border-left: 4px solid #a4262c;
+  background-color: #fdf5f5;
+  color: #8a1f24;
+  font-weight: 600;
+}
+/* Selama kosong, wadah pesan galat tidak menyisakan ruang sama sekali. */
+.pesan-galat:empty {
+  display: none;
+}
+/* Keadaan: nonaktif ---------------------------------------------------------
+Dipakai mulai Minggu 05, misalnya ketika tombol Ambil Nomor dimatikan
+sesaat setelah ditekan agar tidak terkirim dua kali. */
+button:disabled,
+input:disabled {
+  cursor: not-allowed;
+  background-color: var(--warna-latar);
+  border-color: var(--warna-garis);
+  color: var(--warna-teks-lembut);
+}
+button:disabled:hover {
+  background-color: var(--warna-latar);
+}
+/* Perpindahan halus pada tombol, dimatikan bagi pengguna yang memang
+meminta pengurangan gerak lewat pengaturan sistemnya. */
+@media (prefers-reduced-motion: no-preference) {
+  button {
+    transition: background-color 150ms ease;
+  }
+}
+/* ---- Tablet ke atas ---- */
+@media (min-width: 48em) {
+  /* Token pun boleh disesuaikan per ukuran layar. Satu baris di sini
+memperbesar seluruh nomor antrean di semua halaman. */
+  :root {
+    --teks-raksasa: 4.5rem;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  /* Nama situs dan navigasi berdampingan begitu ada ruang. */
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--ruang-3) var(--ruang-5);
+  }
+  header > p {
+    margin-bottom: 0;
+  }
+  main > section,
+  main > form {
+    padding: var(--ruang-5);
+  }
+  /* Daftar definisi berubah dari menurun menjadi dua kolom: istilah di
+kiri, penjelasan di kanan. */
+  dt {
+    flex-basis: 9rem;
+  }
+  dd {
+    flex-basis: calc(100% - 9rem - var(--ruang-3));
+  }
+}
+/* ---- Desktop ke atas ---- */
+@media (min-width: 64em) {
+  /* Kartu-kartu disusun berdampingan dan dibiarkan membungkus sendiri.
+flex: 1 1 18rem berarti "boleh melar, boleh menyusut, mulai dari
+18rem" — jumlah kolom per baris ditentukan ruang yang tersedia,
+bukan ditetapkan angkanya. */
+  main {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--ruang-4);
+  }
+  /* Anak langsung main yang bukan kartu tetap selebar penuh. */
+  main > h1,
+  main > p,
+  main > form {
+    flex-basis: 100%;
+  }
+  main > section {
+    flex: 1 1 18rem;
+    margin-top: 0; /* jarak antar kartu kini diatur gap */
+  }
+  main > form {
+    margin-top: 0;
+  }
+  /* Tabel antrean butuh lebar penuh; memaksanya berbagi baris hanya
+membuatnya tergulir tanpa alasan. */
+  section[aria-labelledby="judul-daftar"] {
+    flex-basis: 100%;
+  }
 }
