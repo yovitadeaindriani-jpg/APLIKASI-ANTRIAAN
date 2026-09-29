@@ -1,0 +1,207 @@
+/* =============================================================================
+QueueApp — style.css
+=============================================================================
+Ditulis mobile-first: aturan dasar berlaku untuk layar sempit, lalu
+media query MENAMBAH aturan untuk layar yang lebih lebar. Tidak ada
+satu pun max-width media query di berkas ini.
+Tanpa framework dan tanpa preprocessor — hanya CSS biasa.
+Urutan bagian sengaja dari umum ke khusus, mengikuti cara cascade
+bekerja: yang ditulis belakangan menimpa yang sebelumnya bila
+kekhususannya sama.
+
+
+1. Reset
+2. Token desain
+3. Tipografi dasar
+4. Kerangka halaman
+5. Navigasi
+========================================================================== */
+
+/* 1. RESET -------------------------------------------------------------------
+Sekadar meratakan perbedaan bawaan antar peramban. Bukan reset besar. */
+*,
+*::before,
+*::after {
+  /* Lebar elemen dihitung termasuk padding dan border.
+Tanpa ini, menambah padding membuat elemen melebar tak terduga. */
+  box-sizing: border-box;
+}
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+ul,
+ol {
+  padding-left: 0;
+  list-style: none;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+button,
+input {
+  font: inherit; /* elemen form tidak mewarisi font secara otomatis */
+  color: inherit;
+}
+
+/* 2. TOKEN DESAIN ------------------------------------------------------------
+Nilai yang dipakai berulang ditulis sekali di sini. Mengubah satu baris
+di bagian ini mengubah seluruh halaman — itulah gunanya. */
+:root {
+  /* Warna. Pasangan teks dan latar dipilih agar kontrasnya memenuhi
+WCAG AA (minimal 4.5:1 untuk teks biasa). */
+  --warna-latar: #f6f7f9;
+  --warna-permukaan: #ffffff;
+  --warna-teks: #16191d;
+  --warna-teks-lembut: #4c545c;
+  --warna-garis: #d3d8de;
+  --warna-utama: #14488a;
+  --warna-utama-gelap: #0e3465;
+  --warna-fokus: #b8500a;
+  /* Skala jarak. Kelipatan tetap membuat spacing konsisten tanpa
+perlu menebak angka setiap kali. */
+  --ruang-1: 0.25rem;
+  --ruang-2: 0.5rem;
+  --ruang-3: 1rem;
+  --ruang-4: 1.5rem;
+  --ruang-5: 2rem;
+  --ruang-6: 3rem;
+  /* Ukuran huruf */
+  --teks-kecil: 0.875rem;
+  --teks-dasar: 1rem;
+  --teks-sedang: 1.25rem;
+  --teks-besar: 1.5rem;
+  --teks-raksasa: 3rem;
+  --lebar-isi: 60rem;
+  --lengkung: 0.5rem;
+}
+
+/* 3. TIPOGRAFI DASAR --------------------------------------------------------- */
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  font-size: var(--teks-dasar);
+  line-height: 1.6;
+  color: var(--warna-teks);
+  background-color: var(--warna-latar);
+}
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  text-wrap: balance;
+}
+h1 {
+  font-size: var(--teks-besar);
+}
+h2 {
+  font-size: var(--teks-sedang);
+}
+h3 {
+  font-size: var(--teks-dasar);
+}
+/* Baris teks yang terlalu panjang melelahkan dibaca. Batasnya diukur
+dengan ch — lebar karakter — bukan piksel. */
+p {
+  max-width: 65ch;
+}
+a {
+  color: var(--warna-utama);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.15em;
+}
+a:hover {
+  color: var(--warna-utama-gelap);
+}
+/* Satu aturan fokus untuk seluruh halaman. focus-visible hanya muncul
+ketika pengguna memakai keyboard, sehingga klik tetikus tidak
+meninggalkan garis fokus. */
+:focus-visible {
+  outline: 3px solid var(--warna-fokus);
+  outline-offset: 2px;
+}
+/* 4. KERANGKA HALAMAN -------------------------------------------------------- */
+/* Tautan lompat. Disembunyikan dari pandangan, tetapi TIDAK dari pembaca
+layar, dan muncul kembali begitu menerima fokus keyboard.
+display:none akan menghilangkannya dari urutan fokus — justru merusak. */
+body > a[href="#konten-utama"] {
+  position: absolute;
+  left: var(--ruang-3);
+  top: var(--ruang-3);
+  z-index: 10;
+  padding: var(--ruang-2) var(--ruang-3);
+  background-color: var(--warna-permukaan);
+  border: 2px solid var(--warna-utama);
+  border-radius: var(--lengkung);
+  transform: translateY(-200%);
+}
+body > a[href="#konten-utama"]:focus {
+  transform: translateY(0);
+}
+
+header,
+main,
+footer {
+  max-width: var(--lebar-isi);
+  margin-inline: auto;
+  padding-inline: var(--ruang-3);
+}
+header {
+  padding-block: var(--ruang-3);
+  border-bottom: 1px solid var(--warna-garis);
+}
+main {
+  padding-block: var(--ruang-4) var(--ruang-6);
+}
+main > section {
+  margin-top: var(--ruang-5);
+}
+footer {
+  padding-block: var(--ruang-4) var(--ruang-5);
+  border-top: 1px solid var(--warna-garis);
+  color: var(--warna-teks-lembut);
+  font-size: var(--teks-kecil);
+}
+footer p + p {
+  margin-top: var(--ruang-2);
+}
+
+/* 5. NAVIGASI ---------------------------------------------------------------- */
+header > p {
+  font-size: var(--teks-sedang);
+  margin-bottom: var(--ruang-3);
+}
+/* Flexbox dengan wrap: di layar sempit tautan turun ke baris berikutnya
+dengan sendirinya, tanpa perlu media query. */
+header nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ruang-2) var(--ruang-4);
+}
+header nav a {
+  display: inline-block;
+  padding-block: var(--ruang-1);
+}
+/* Selektor atribut: menandai halaman yang sedang dibuka tanpa perlu
+menambahkan class. Penandanya sudah ada sejak Minggu 03. */
+header nav a[aria-current="page"] {
+  font-weight: 700;
+  color: var(--warna-teks);
+  text-decoration: none;
+  border-bottom: 3px solid var(--warna-utama);
+}
