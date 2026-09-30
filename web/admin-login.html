@@ -3,8 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Masuk sebagai Petugas — QueueApp</title>
-    <meta name="description" content="Halaman masuk untuk petugas QueueApp." />
+    <title>Antrean Saat Ini — QueueApp</title>
+    <meta
+      name="description"
+      content="Melihat nomor antrean yang sedang dipanggil dan jumlah antrean
+yang masih menunggu."
+    />
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <a href="#konten-utama">Lewati ke konten utama</a>
@@ -35,6 +40,10 @@ Sampai saat itu, form belum melakukan apa pun.
       <form action="admin-dashboard.html" method="post">
         <fieldset>
           <legend>Kredensial petugas</legend>
+
+          <!-- Wadah pesan kesalahan -->
+          <p class="pesan-galat" role="alert"></p>
+
           <p>
             <label for="email">Email</label>
             <input
@@ -45,7 +54,9 @@ Sampai saat itu, form belum melakukan apa pun.
               required
               aria-describedby="bantuan-email"
             />
-            <span id="bantuan-email">Contoh: petugas@queueapp.test</span>
+            <span class="bantuan" id="bantuan-email"
+              >Contoh: petugas@queueapp.test</span
+            >
           </p>
           <p>
             <label for="password">Password</label>
@@ -68,14 +79,14 @@ Wadah pesan kesalahan. Dikosongkan sampai ada kesalahan sungguhan.
 role="alert" membuat pembaca layar mengumumkan isinya begitu terisi,
 tanpa memindahkan fokus pengguna.-->
 
-      <section aria-labelledby="judul-kesalahan">
-        <h2 id="judul-kesalahan">Pesan Kesalahan</h2>
-        <p role="alert"></p>
-        <p>
-          Bila kredensial salah, sistem tidak memberi tahu bagian mana yang
-          keliru. Menyebutkan "email tidak terdaftar" akan memberitahu penyerang
-          bahwa email lainnya terdaftar.
-        </p>
+     <section aria-labelledby="judul-kesalahan">
+  <h2 id="judul-kesalahan">Tentang Pesan Kesalahan</h2>
+  <p>
+    Bila kredensial salah, sistem tidak memberi tahu bagian mana yang keliru.
+    Menyebutkan "email tidak terdaftar" akan memberitahu penyerang bahwa email
+    lainnya terdaftar.
+  </p>
+</section>
       </section>
     </main>
     <footer>

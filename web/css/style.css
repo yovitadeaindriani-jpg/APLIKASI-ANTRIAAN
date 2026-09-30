@@ -1,0 +1,577 @@
+/* =============================================================================
+QueueApp — style.css
+=============================================================================
+Ditulis mobile-first: aturan dasar berlaku untuk layar sempit, lalu
+media query MENAMBAH aturan untuk layar yang lebih lebar. Tidak ada
+satu pun max-width media query di berkas ini.
+Tanpa framework dan tanpa preprocessor — hanya CSS biasa.
+Urutan bagian sengaja dari umum ke khusus, mengikuti cara cascade
+bekerja: yang ditulis belakangan menimpa yang sebelumnya bila
+kekhususannya sama.
+
+
+1. Reset
+2. Token desain
+3. Tipografi dasar
+4. Kerangka halaman
+5. Navigasi
+========================================================================== */
+
+/* 1. RESET -------------------------------------------------------------------
+Sekadar meratakan perbedaan bawaan antar peramban. Bukan reset besar. */
+*,
+*::before,
+*::after {
+  /* Lebar elemen dihitung termasuk padding dan border.
+Tanpa ini, menambah padding membuat elemen melebar tak terduga. */
+  box-sizing: border-box;
+}
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+ul,
+ol {
+  padding-left: 0;
+  list-style: none;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+button,
+input {
+  font: inherit; /* elemen form tidak mewarisi font secara otomatis */
+  color: inherit;
+}
+
+/* 2. TOKEN DESAIN ------------------------------------------------------------
+Nilai yang dipakai berulang ditulis sekali di sini. Mengubah satu baris
+di bagian ini mengubah seluruh halaman — itulah gunanya. */
+:root {
+  /* Warna. Pasangan teks dan latar dipilih agar kontrasnya memenuhi
+WCAG AA (minimal 4.5:1 untuk teks biasa). */
+  --warna-latar: #f6f7f9;
+  --warna-permukaan: #ffffff;
+  --warna-teks: #16191d;
+  --warna-teks-lembut: #4c545c;
+  --warna-garis: #d3d8de;
+  --warna-utama: #14488a;
+  --warna-utama-gelap: #0e3465;
+  --warna-fokus: #b8500a;
+  /* Skala jarak. Kelipatan tetap membuat spacing konsisten tanpa
+perlu menebak angka setiap kali. */
+  --ruang-1: 0.25rem;
+  --ruang-2: 0.5rem;
+  --ruang-3: 1rem;
+  --ruang-4: 1.5rem;
+  --ruang-5: 2rem;
+  --ruang-6: 3rem;
+  /* Ukuran huruf */
+  --teks-kecil: 0.875rem;
+  --teks-dasar: 1rem;
+  --teks-sedang: 1.25rem;
+  --teks-besar: 1.5rem;
+  --teks-raksasa: 3rem;
+  --lebar-isi: 60rem;
+  --lengkung: 0.5rem;
+}
+
+/* 3. TIPOGRAFI DASAR --------------------------------------------------------- */
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  font-size: var(--teks-dasar);
+  line-height: 1.6;
+  color: var(--warna-teks);
+  background-color: var(--warna-latar);
+}
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  text-wrap: balance;
+}
+h1 {
+  font-size: var(--teks-besar);
+}
+h2 {
+  font-size: var(--teks-sedang);
+}
+h3 {
+  font-size: var(--teks-dasar);
+}
+/* Baris teks yang terlalu panjang melelahkan dibaca. Batasnya diukur
+dengan ch — lebar karakter — bukan piksel. */
+p {
+  max-width: 65ch;
+}
+a {
+  color: var(--warna-utama);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.15em;
+}
+a:hover {
+  color: var(--warna-utama-gelap);
+}
+/* Satu aturan fokus untuk seluruh halaman. focus-visible hanya muncul
+ketika pengguna memakai keyboard, sehingga klik tetikus tidak
+meninggalkan garis fokus. */
+:focus-visible {
+  outline: 3px solid var(--warna-fokus);
+  outline-offset: 2px;
+}
+/* 4. KERANGKA HALAMAN -------------------------------------------------------- */
+/* Tautan lompat. Disembunyikan dari pandangan, tetapi TIDAK dari pembaca
+layar, dan muncul kembali begitu menerima fokus keyboard.
+display:none akan menghilangkannya dari urutan fokus — justru merusak. */
+body > a[href="#konten-utama"] {
+  position: absolute;
+  left: var(--ruang-3);
+  top: var(--ruang-3);
+  z-index: 10;
+  padding: var(--ruang-2) var(--ruang-3);
+  background-color: var(--warna-permukaan);
+  border: 2px solid var(--warna-utama);
+  border-radius: var(--lengkung);
+  transform: translateY(-200%);
+}
+body > a[href="#konten-utama"]:focus {
+  transform: translateY(0);
+}
+
+header,
+main,
+footer {
+  max-width: var(--lebar-isi);
+  margin-inline: auto;
+  padding-inline: var(--ruang-3);
+}
+header {
+  padding-block: var(--ruang-3);
+  border-bottom: 1px solid var(--warna-garis);
+}
+main {
+  padding-block: var(--ruang-4) var(--ruang-6);
+}
+main > section {
+  margin-top: var(--ruang-5);
+}
+footer {
+  padding-block: var(--ruang-4) var(--ruang-5);
+  border-top: 1px solid var(--warna-garis);
+  color: var(--warna-teks-lembut);
+  font-size: var(--teks-kecil);
+}
+footer p + p {
+  margin-top: var(--ruang-2);
+}
+
+/* 5. NAVIGASI ---------------------------------------------------------------- */
+header > p {
+  font-size: var(--teks-sedang);
+  margin-bottom: var(--ruang-3);
+}
+/* Flexbox dengan wrap: di layar sempit tautan turun ke baris berikutnya
+dengan sendirinya, tanpa perlu media query. */
+header nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ruang-2) var(--ruang-4);
+}
+header nav a {
+  display: inline-block;
+  padding-block: var(--ruang-1);
+}
+/* Selektor atribut: menandai halaman yang sedang dibuka tanpa perlu
+menambahkan class. Penandanya sudah ada sejak Minggu 03. */
+header nav a[aria-current="page"] {
+  font-weight: 700;
+  color: var(--warna-teks);
+  text-decoration: none;
+  border-bottom: 3px solid var(--warna-utama);
+}
+
+/* =============================================================================
+6. TAMPILAN ANTREAN
+========================================================================== */
+/* Setiap section menjadi kartu dengan latar sendiri, sehingga batas antar
+bagian terlihat tanpa perlu garis pemisah tambahan.
+Form yang berdiri langsung di bawah main — seperti form login —
+mendapat perlakuan yang sama, supaya tidak ada satu blok yang tampak
+melayang di luar sistem kartu. */
+main > section,
+main > form {
+  background-color: var(--warna-permukaan);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--lengkung);
+  padding: var(--ruang-4) var(--ruang-3);
+}
+main > form {
+  margin-top: var(--ruang-5);
+}
+/* Paragraf pengantar tepat di bawah judul halaman perlu jarak sendiri;
+margin bawaannya sudah dinolkan pada reset. */
+main > p {
+  margin-top: var(--ruang-3);
+}
+main > section > * + * {
+  margin-top: var(--ruang-3);
+}
+
+/* Nomor yang sedang dipanggil adalah hal pertama yang dicari pengunjung,
+jadi dibuat paling besar di halaman — lebih besar daripada h1 sekalipun.
+Ukuran menandakan kepentingan; itu tugas CSS, bukan tugas HTML. */
+.nomor-antrean {
+  font-size: var(--teks-raksasa);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--warna-utama);
+  /* tabular-nums menjaga lebar tiap angka tetap sama, sehingga nomor
+tidak bergeser-geser ketika berubah nanti */
+  font-variant-numeric: tabular-nums;
+}
+/* Keadaan kosong tidak perlu sebesar dan sementereng nomor sungguhan. */
+.nomor-antrean--kosong {
+  font-size: var(--teks-dasar);
+  color: var(--warna-teks-lembut);
+}
+/* Daftar nomor menunggu ditampilkan berjajar sebagai potongan kecil,
+bukan sebagai daftar menurun yang memanjangkan halaman. */
+.daftar-nomor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ruang-2);
+}
+.daftar-nomor li {
+  padding: var(--ruang-1) var(--ruang-3);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--lengkung);
+  background-color: var(--warna-latar);
+  font-variant-numeric: tabular-nums;
+}
+/* Daftar definisi: istilah dan penjelasannya dijajarkan agar mudah dipindai.
+Di layar sempit tetap menurun karena flex-wrap. */
+dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ruang-2) var(--ruang-3);
+}
+dt {
+  flex-basis: 100%;
+  font-weight: 700;
+  font-size: var(--teks-kecil);
+  letter-spacing: 0.04em;
+  color: var(--warna-teks-lembut);
+}
+dd {
+  flex-basis: 100%;
+}
+/* Langkah bernomor pada halaman Ambil Nomor. list-style dimatikan pada
+reset, jadi penomorannya dikembalikan di sini secara sengaja. */
+main ol {
+  list-style: decimal;
+  padding-left: var(--ruang-4);
+}
+main ol li + li {
+  margin-top: var(--ruang-2);
+}
+/* Tombol -------------------------------------------------------------------
+Bentuk dasarnya di sini; keadaan fokus, nonaktif, dan galat menyusul
+pada bagian Form. */
+
+button {
+  display: inline-block;
+  padding: var(--ruang-2) var(--ruang-4);
+  /* 2.75rem ≈ 44px, ukuran target sentuh minimal yang nyaman di ponsel */
+  min-height: 2.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--lengkung);
+  background-color: var(--warna-utama);
+  color: var(--warna-permukaan);
+  font-weight: 600;
+  cursor: pointer;
+}
+button:hover {
+  background-color: var(--warna-utama-gelap);
+}
+
+/* =============================================================================
+7. DASHBOARD PETUGAS
+========================================================================== */
+/* Tabel lebar tidak boleh mendorong lebar halaman. Pembungkus inilah yang
+digulir, bukan seluruh badan halaman. */
+.tabel-gulir {
+  overflow-x: auto;
+  /* Garis fokus perlu ruang agar tidak terpotong saat area digulir
+dengan keyboard. */
+  padding: 2px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  /* Mencegah kolom menyempit sampai isinya terpelintir; bila tidak muat,
+pembungkus di atas yang menggulir. */
+  min-width: 40rem;
+}
+caption {
+  text-align: left;
+  color: var(--warna-teks-lembut);
+  font-size: var(--teks-kecil);
+  margin-bottom: var(--ruang-2);
+  /* Caption ikut selebar tabel, sehingga di layar sempit ia tergulir
+keluar bersama kolom-kolom kanan. Dikunci ke tepi kiri area gulir
+agar tetap terbaca tanpa perlu menggulir lebih dulu. */
+  position: sticky;
+  left: 0;
+}
+th,
+td {
+  padding: var(--ruang-2) var(--ruang-3);
+  text-align: left;
+  border-bottom: 1px solid var(--warna-garis);
+  vertical-align: top;
+}
+thead th {
+  background-color: var(--warna-latar);
+  font-size: var(--teks-kecil);
+  letter-spacing: 0.04em;
+  border-bottom-width: 2px;
+  white-space: nowrap;
+}
+/* Nomor antrean adalah kepala baris — ditandai th scope="row" sejak
+Minggu 03, jadi cukup dipilih lewat penandanya. */
+tbody th[scope="row"] {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+td time {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* Status diberi warna lewat selektor atribut, memakai data-status yang
+nilainya sama persis dengan status di model data. Tidak perlu class
+tambahan, dan tidak mungkin meleset dari daftar status yang sah. */
+td[data-status] {
+  font-size: var(--teks-kecil);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+td[data-status="WAITING"] {
+  color: #7a4600;
+}
+td[data-status="CALLED"] {
+  color: #0e3465;
+}
+td[data-status="COMPLETED"] {
+  color: #14562f;
+}
+/* Warna saja tidak boleh menjadi satu-satunya pembeda — pengguna dengan
+buta warna tidak akan menangkapnya. Karena itu setiap status juga
+diberi penanda bentuk di depannya. */
+td[data-status]::before {
+  margin-right: var(--ruang-1);
+}
+td[data-status="WAITING"]::before {
+  content: "○";
+}
+td[data-status="CALLED"]::before {
+  content: "●";
+}
+td[data-status="COMPLETED"]::before {
+  content: "✓";
+}
+/* Tombol di dalam baris tabel lebih kecil daripada tombol utama. */
+td form {
+  margin: 0;
+}
+td button {
+  padding: var(--ruang-1) var(--ruang-3);
+  min-height: 2.25rem;
+  font-size: var(--teks-kecil);
+  white-space: nowrap;
+}
+/* Ringkasan hari ini memakai tata letak dl yang sama dengan halaman lain —
+menurun di layar sempit, dua kolom mulai tablet. Angkanya saja yang
+ditebalkan.
+Percobaan pertama membuat istilah dan nilainya berjajar bebas dengan
+flex-basis: auto. Di layar 390px hasilnya justru berhimpitan sehingga
+sulit dilihat pasangan mana milik mana. */
+section[aria-labelledby="judul-ringkasan"] dd {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+/* =============================================================================
+8. FORM DAN KEADAANNYA
+========================================================================== */
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+legend {
+  padding: 0;
+  font-weight: 700;
+  font-size: var(--teks-sedang);
+  margin-bottom: var(--ruang-3);
+}
+form p + p {
+  margin-top: var(--ruang-3);
+}
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: var(--ruang-1);
+}
+input {
+  display: block;
+  width: 100%;
+  max-width: 24rem;
+  min-height: 2.75rem;
+  padding: var(--ruang-2) var(--ruang-3);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--lengkung);
+  background-color: var(--warna-permukaan);
+}
+/* Teks bantuan berada di bawah input dan terhubung lewat aria-describedby
+sejak Minggu 03, jadi tetap terbaca pembaca layar meski tampil kecil. */
+.bantuan {
+  display: block;
+  margin-top: var(--ruang-1);
+  font-size: var(--teks-kecil);
+  color: var(--warna-teks-lembut);
+}
+/* Keadaan: fokus ------------------------------------------------------------
+Garis fokus global sudah diatur pada bagian 3. Di sini border input ikut
+menggelap agar batas kolom yang aktif jelas, bukan hanya garis luarnya. */
+input:focus-visible {
+  border-color: var(--warna-utama);
+}
+/* Keadaan: galat ------------------------------------------------------------
+:user-invalid hanya menyala setelah pengguna benar-benar berinteraksi
+dengan kolom dan isinya masih tidak sah — berbeda dari :invalid yang
+menyala sejak halaman dimuat dan memerahkan form yang belum disentuh.
+Aturan ini bekerja tanpa satu baris JavaScript, memanfaatkan required
+dan type="email" yang sudah dipasang sejak Minggu 03.
+aria-invalid="true" disiapkan untuk kesalahan dari server pada Minggu 13. */
+input:user-invalid,
+input[aria-invalid="true"] {
+  border-color: #a4262c;
+  border-width: 2px;
+}
+/* Warna saja tidak cukup sebagai penanda galat. Latar yang sedikit
+berbeda memberi petunjuk kedua. */
+input:user-invalid {
+  background-color: #fdf5f5;
+}
+.pesan-galat {
+  padding: var(--ruang-2) var(--ruang-3);
+  border-left: 4px solid #a4262c;
+  background-color: #fdf5f5;
+  color: #8a1f24;
+  font-weight: 600;
+}
+/* Selama kosong, wadah pesan galat tidak menyisakan ruang sama sekali. */
+.pesan-galat:empty {
+  display: none;
+}
+/* Keadaan: nonaktif ---------------------------------------------------------
+Dipakai mulai Minggu 05, misalnya ketika tombol Ambil Nomor dimatikan
+sesaat setelah ditekan agar tidak terkirim dua kali. */
+button:disabled,
+input:disabled {
+  cursor: not-allowed;
+  background-color: var(--warna-latar);
+  border-color: var(--warna-garis);
+  color: var(--warna-teks-lembut);
+}
+button:disabled:hover {
+  background-color: var(--warna-latar);
+}
+/* Perpindahan halus pada tombol, dimatikan bagi pengguna yang memang
+meminta pengurangan gerak lewat pengaturan sistemnya. */
+@media (prefers-reduced-motion: no-preference) {
+  button {
+    transition: background-color 150ms ease;
+  }
+}
+/* ---- Tablet ke atas ---- */
+@media (min-width: 48em) {
+  /* Token pun boleh disesuaikan per ukuran layar. Satu baris di sini
+memperbesar seluruh nomor antrean di semua halaman. */
+  :root {
+    --teks-raksasa: 4.5rem;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  /* Nama situs dan navigasi berdampingan begitu ada ruang. */
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--ruang-3) var(--ruang-5);
+  }
+  header > p {
+    margin-bottom: 0;
+  }
+  main > section,
+  main > form {
+    padding: var(--ruang-5);
+  }
+  /* Daftar definisi berubah dari menurun menjadi dua kolom: istilah di
+kiri, penjelasan di kanan. */
+  dt {
+    flex-basis: 9rem;
+  }
+  dd {
+    flex-basis: calc(100% - 9rem - var(--ruang-3));
+  }
+}
+/* ---- Desktop ke atas ---- */
+@media (min-width: 64em) {
+  /* Kartu-kartu disusun berdampingan dan dibiarkan membungkus sendiri.
+flex: 1 1 18rem berarti "boleh melar, boleh menyusut, mulai dari
+18rem" — jumlah kolom per baris ditentukan ruang yang tersedia,
+bukan ditetapkan angkanya. */
+  main {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--ruang-4);
+  }
+  /* Anak langsung main yang bukan kartu tetap selebar penuh. */
+  main > h1,
+  main > p,
+  main > form {
+    flex-basis: 100%;
+  }
+  main > section {
+    flex: 1 1 18rem;
+    margin-top: 0; /* jarak antar kartu kini diatur gap */
+  }
+  main > form {
+    margin-top: 0;
+  }
+  /* Tabel antrean butuh lebar penuh; memaksanya berbagi baris hanya
+membuatnya tergulir tanpa alasan. */
+  section[aria-labelledby="judul-daftar"] {
+    flex-basis: 100%;
+  }
+}

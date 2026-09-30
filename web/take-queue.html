@@ -3,8 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ambil Nomor Antrean — QueueApp</title>
-    <meta name="description" content="Mengambil nomor antrean baru." />
+    <title>Antrean Saat Ini — QueueApp</title>
+    <meta
+      name="description"
+      content="Melihat nomor antrean yang sedang dipanggil dan jumlah antrean
+yang masih menunggu."
+    />
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <section aria-labelledby="judul-form">
@@ -29,8 +34,9 @@ Minggu 11 : form ini mengirim POST /api/queues
     </section>
     <section id="konfirmasi" aria-labelledby="judul-konfirmasi">
       <h2 id="judul-konfirmasi">Nomor Antrean Anda</h2>
-      <p>Belum ada nomor yang diambil dari perangkat ini.</p>
-      <p><a href="index.html">Lihat antrean saat ini</a></p>
+      <p class="nomor-antrean nomor-antrean--kosong">
+        Belum ada nomor yang diambil dari perangkat ini.
+      </p>
     </section>
     <section aria-labelledby="judul-langkah">
       <h2 id="judul-langkah">Selanjutnya</h2>
