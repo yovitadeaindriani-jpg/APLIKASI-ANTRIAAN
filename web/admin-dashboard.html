@@ -47,9 +47,16 @@ yang masih menunggu.">
       <p>Antrean berikutnya yang akan dipanggil: <strong>A004</strong>.</p>
     </section>
      <section id="daftar-antrean" aria-labelledby="judul-daftar">
-      <h2 id="judul-daftar">Daftar Antrean</h2>
-      <table>
-        <caption>Antrean hari ini, diurutkan dari yang paling awal dibuat.</caption>
+  <h2 id="judul-daftar">Daftar Antrean</h2>
+
+  <!--
+    Pembungkus agar tabel dapat digulir menyamping di layar sempit tanpa
+    mendorong lebar halaman. role="region" + tabindex="0" membuat area
+    gulir ini dapat dicapai dan digulir dengan keyboard.
+  -->
+  <div class="tabel-gulir" role="region" aria-label="Tabel daftar antrean" tabindex="0">
+    <table>
+      <caption>Antrean hari ini, diurutkan dari yang paling awal dibuat.</caption>
         <thead>
           <tr>
             <th scope="col">Nomor</th>
@@ -60,53 +67,69 @@ yang masih menunggu.">
             <th scope="col">Aksi</th>
           </tr>
         </thead>
-         <tr>
-            <th scope="row">A001</th>
-            <td>COMPLETED</td>
-            <td><time datetime="2026-09-03T08:30">08.30</time></td>
-            <td><time datetime="2026-09-03T08:32">08.32</time></td>
-            <td><time datetime="2026-09-03T08:41">08.41</time></td>
-            <td>—</td>
-          </tr>
-          <tr>
-            <th scope="row">A002</th>
-            <td>COMPLETED</td>
-            <td><time datetime="2026-09-03T08:47">08.47</time></td>
-            <td><time datetime="2026-09-03T08:55">08.55</time></td>
-            <td><time datetime="2026-09-03T09:06">09.06</time></td>
-            <td>—</td>
-          </tr>
-          <tr>
-            <th scope="row">A003</th>
-            <td>CALLED</td>
-            <td><time datetime="2026-09-03T09:02">09.02</time></td>
-            <td><time datetime="2026-09-03T09:15">09.15</time></td>
-            <td>—</td>
-            <td>
-              <!-- Minggu 11: POST /api/queues/3/complete -->
-              <form action="#daftar-antrean" method="post">
-                <button type="submit">Selesaikan A003</button>
-              </form>
-            </td>
-          </tr>
-<tr>
-            <th scope="row">A004</th>
-            <td>WAITING</td>
-            <td><time datetime="2026-09-03T09:10">09.10</time></td>
-            <td>—</td>
-            <td>—</td>
-            <td>—</td>
-          </tr>
-          <tr>
-            <th scope="row">A005</th>
-            <td>WAITING</td>
-            <td><time datetime="2026-09-03T09:18">09.18</time></td>
-            <td>—</td>
-            <td>—</td>
-            <td>—</td>
-          </tr>
-        </tbody>
-      </table>
+        <thead>
+  <tr>
+    <th scope="col">Nomor</th>
+    <th scope="col">Status</th>
+    <th scope="col">Dibuat</th>
+    <th scope="col">Dipanggil</th>
+    <th scope="col">Selesai</th>
+    <th scope="col">Aksi</th>
+  </tr>
+</thead>
+
+<tbody>
+  <tr>
+    <th scope="row">A001</th>
+    <td data-status="COMPLETED">COMPLETED</td>
+    <td><time datetime="2026-09-03T08:30">08.30</time></td>
+    <td><time datetime="2026-09-03T08:32">08.32</time></td>
+    <td><time datetime="2026-09-03T08:41">08.41</time></td>
+    <td>—</td>
+  </tr>
+
+  <tr>
+    <th scope="row">A002</th>
+    <td data-status="COMPLETED">COMPLETED</td>
+    <td><time datetime="2026-09-03T08:47">08.47</time></td>
+    <td><time datetime="2026-09-03T08:55">08.55</time></td>
+    <td><time datetime="2026-09-03T09:06">09.06</time></td>
+    <td>—</td>
+  </tr>
+
+  <tr>
+    <th scope="row">A003</th>
+    <td data-status="CALLED">CALLED</td>
+    <td><time datetime="2026-09-03T09:02">09.02</time></td>
+    <td><time datetime="2026-09-03T09:15">09.15</time></td>
+    <td>—</td>
+    <td>
+      <!-- Minggu 11: POST /api/queues/3/complete -->
+      <form action="#daftar-antrean" method="post">
+        <button type="submit">Selesaikan A003</button>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <th scope="row">A004</th>
+    <td data-status="WAITING">WAITING</td>
+    <td><time datetime="2026-09-03T09:10">09.10</time></td>
+    <td>—</td>
+    <td>—</td>
+    <td>—</td>
+  </tr>
+
+  <tr>
+    <th scope="row">A005</th>
+    <td data-status="WAITING">WAITING</td>
+    <td><time datetime="2026-09-03T09:18">09.18</time></td>
+    <td>—</td>
+    <td>—</td>
+    <td>—</td>
+  </tr>
+</tbody>
+</table>
     </section>
   </main>
   <footer>

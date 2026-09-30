@@ -40,6 +40,10 @@ Sampai saat itu, form belum melakukan apa pun.
       <form action="admin-dashboard.html" method="post">
         <fieldset>
           <legend>Kredensial petugas</legend>
+
+          <!-- Wadah pesan kesalahan -->
+          <p class="pesan-galat" role="alert"></p>
+
           <p>
             <label for="email">Email</label>
             <input
@@ -50,7 +54,9 @@ Sampai saat itu, form belum melakukan apa pun.
               required
               aria-describedby="bantuan-email"
             />
-            <span id="bantuan-email">Contoh: petugas@queueapp.test</span>
+            <span class="bantuan" id="bantuan-email"
+              >Contoh: petugas@queueapp.test</span
+            >
           </p>
           <p>
             <label for="password">Password</label>
@@ -73,14 +79,14 @@ Wadah pesan kesalahan. Dikosongkan sampai ada kesalahan sungguhan.
 role="alert" membuat pembaca layar mengumumkan isinya begitu terisi,
 tanpa memindahkan fokus pengguna.-->
 
-      <section aria-labelledby="judul-kesalahan">
-        <h2 id="judul-kesalahan">Pesan Kesalahan</h2>
-        <p role="alert"></p>
-        <p>
-          Bila kredensial salah, sistem tidak memberi tahu bagian mana yang
-          keliru. Menyebutkan "email tidak terdaftar" akan memberitahu penyerang
-          bahwa email lainnya terdaftar.
-        </p>
+     <section aria-labelledby="judul-kesalahan">
+  <h2 id="judul-kesalahan">Tentang Pesan Kesalahan</h2>
+  <p>
+    Bila kredensial salah, sistem tidak memberi tahu bagian mana yang keliru.
+    Menyebutkan "email tidak terdaftar" akan memberitahu penyerang bahwa email
+    lainnya terdaftar.
+  </p>
+</section>
       </section>
     </main>
     <footer>
