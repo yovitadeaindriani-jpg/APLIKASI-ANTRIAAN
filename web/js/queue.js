@@ -77,3 +77,55 @@ return TRANSISI_SAH[dari].includes(ke);
 Nomor ditentukan di sini, bukan di halaman. Alasannya sama dengan alasan
 nanti nomor ditentukan server dan bukan client (docs/architecture.md 6.1):
 satu tempat yang memegang hitungan berarti nomor tidak mungkin kembar. */
+
+const AWALAN = 'A';
+const PANJANG_DIGIT = 3;
+/* Mengubah angka menjadi nomor antrean yang terbaca.
+1 → A001
+42 → A042
+1234 → A1234 (lewat 999 nomor tetap benar, hanya lebih panjang;
+lebih baik lebih panjang daripada berulang) */
+export function formatQueueNumber(angka) {
+return AWALAN + String(angka).padStart(PANJANG_DIGIT, '0');
+}
+
+export function takeQueue() {
+state.lastNumber += 1;
+const queue = {
+id: state.lastNumber,
+queueNumber: formatQueueNumber(state.lastNumber),
+status: STATUS.WAITING,
+createdAt: new Date().toISOString(),
+calledAt: null,
+completedAt: null,
+};
+/* Selalu ditambahkan di akhir, sehingga daftar tetap tersusun menurut
+waktu pembuatan. Urutan inilah yang dipakai callNext untuk menemukan
+antrean tertua tanpa perlu menyortir ulang. */
+state.queues.push(queue);
+state.myQueueId = queue.id;
+simpan();
+return { ok: true, queue: { ...queue } };
+}
+
+export function callNext() {
+const target = state.queues.find((queue) => queue.status === STATUS.WAITING);
+if (!target) {
+return {
+ok: false,
+code: 'NO_WAITING_QUEUE',
+message: 'Tidak ada antrean yang menunggu.',
+};
+}
+/* Hanya boleh ada satu antrean CALLED. Bila petugas memanggil berikutnya
+sementara masih ada yang dipanggil, yang lama dianggap selesai. */
+const sedangDipanggil = state.queues.find((queue) => queue.status === STATUS.CALLED);
+if (sedangDipanggil) {
+sedangDipanggil.status = STATUS.COMPLETED;
+sedangDipanggil.completedAt = new Date().toISOString();
+}
+target.status = STATUS.CALLED;
+target.calledAt = new Date().toISOString();
+simpan();
+return { ok: true, queue: { ...target } };
+}
