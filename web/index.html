@@ -9,7 +9,7 @@
       content="Melihat nomor antrean yang sedang dipanggil dan jumlah antrean 
 yang masih menunggu."
     />
-     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <a href="#konten-utama">Lewati ke konten utama</a>
@@ -30,17 +30,19 @@ yang masih menunggu."
         <p class="nomor-antrean"><strong>A003</strong></p>
         <p>Dipanggil pada pukul <time datetime="09:15">09.15</time>.</p>
       </section>
+      <section aria-labelledby="judul-dipanggil">
+        <h2 id="judul-dipanggil">Sedang Dipanggil</h2>
+        <p class="nomor-antrean" id="nomor-dipanggil">&mdash;</p>
+        <p id="keterangan-dipanggil">Belum ada antrean yang dipanggil.</p>
+      </section>
       <section aria-labelledby="judul-menunggu">
         <h2 id="judul-menunggu">Menunggu</h2>
-        <p><strong>2</strong> antrean masih menunggu.</p>
-        <ul class="daftar-nomor">
-          <li>A004</li>
-          <li>A005</li>
-        </ul>
+        <p id="jumlah-menunggu">Belum ada antrean yang menunggu.</p>
+        <ul class="daftar-nomor" id="daftar-menunggu"></ul>
       </section>
       <section aria-labelledby="judul-nomor-saya">
         <h2 id="judul-nomor-saya">Nomor Antrean Anda</h2>
-        <p>Anda belum mengambil nomor antrean.</p>
+        <p id="nomor-saya">Anda belum mengambil nomor antrean.</p>
         <p><a href="take-queue.html">Ambil nomor antrean</a></p>
       </section>
       <section aria-labelledby="judul-keterangan">
