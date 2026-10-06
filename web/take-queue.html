@@ -46,5 +46,45 @@ Minggu 11 : form ini mengirim POST /api/queues
         <li>Menuju loket ketika nomor Anda dipanggil.</li>
       </ol>
     </section>
+    <footer>
+      <p>QueueApp — reference implementation mata kuliah Web and Mobile Technology (BD323).</p>
+      <p>
+      Minggu 05: prototype. Nomor dibuat di peramban ini dan belum dikirim
+      ke mana pun.
+      </p>
+    </footer>
+    <script type="module" src="js/take-queue.js"></script>
+
   </body>
+  <main id="konten-utama">
+     <h1>Ambil Nomor Antrean</h1>
+     <p id="ringkas-antrean">Belum ada antrean yang sedang dipanggil.</p>
+  <section aria-labelledby="judul-form">
+     <h2 id="judul-form">Ambil Nomor</h2>
+<!--
+Nomor antrean ditentukan oleh server, bukan oleh halaman ini.
+Lihat docs/architecture.md 6.1 — bila client yang menentukan, dua
+pengunjung yang menekan tombol bersamaan bisa mendapat nomor sama.
+Minggu 05 : tombol ini ditangani JavaScript, nomor disimpan di localStorage
+Minggu 11 : form ini mengirim POST /api/queues
+-->
+<form id="form-ambil" action="#konfirmasi" method="post">
+<fieldset>
+<legend>Konfirmasi pengambilan antrean</legend>
+<p>
+Nomor antrean akan dibuatkan untuk Anda. Anda tidak perlu mengisi data apa pun.
+</p>
+<button type="submit">Ambil Nomor Antrean</button>
+</fieldset>
+</form>
+</section>
+<!--
+aria-live="polite" membuat pembaca layar mengumumkan isi bagian ini
+ketika berubah, tanpa memotong apa yang sedang dibacanya.
+-->
+<section id="konfirmasi" aria-labelledby="judul-konfirmasi" aria-live="polite">
+<h2 id="judul-konfirmasi">Nomor Antrean Anda</h2>
+<p class="nomor-antrean nomor-antrean--kosong" id="nomor-saya">Belum ada nomor yang diambil
+dari perangkat ini.</p>
+<p id="status-saya"></p>
 </html>
