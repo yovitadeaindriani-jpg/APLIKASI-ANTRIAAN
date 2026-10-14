@@ -1,0 +1,31 @@
+# dev server Vite, menggantikan nginx yang sebelumnya melayani HTML statis.
+#
+# Vite melayani berkas sumber langsung dan menyuntikkan perubahan ke
+# peramban tanpa memuat ulang halaman (hot module replacement), jadi tidak
+# ada langkah build selama pengembangan.
+# --------------------------------------------------------------------------
+web:
+  # Bookworm (glibc), bukan Alpine (musl). Dependency Vite memuat binary
+  # native — rolldown dan lightningcss — yang varian glibc dan musl-nya
+  # berbeda. package-lock.json dibuat di lingkungan glibc, jadi image
+  # glibc membuat container dan lockfile sepakat.
+  image: node:20-bookworm-slim
+  container_name: queueapp-web
+  restart: unless-stopped
+  working_dir: /app
+  # npm ci memasang persis isi package-lock.json — lebih cepat dan lebih
+  # dapat diulang daripada npm install. Dilewati bila dependency sudah ada
+  # di dalam volume, supaya container tidak memasang ulang setiap kali hidup.
+  command: sh -c "[ -d node_modules/vite ] || npm ci --no-audit --no-fund; npm run dev"
+  ports:
+    - "${WEB_PORT}:5173"
+  volumes:
+   - ./web:/app
+   # Volume anonim untuk node_modules. Tanpa ini, folder kosong dari host
+   # akan menutupi hasil npm install di dalam container — dan dependency
+   # yang dikompilasi untuk Linux tidak selalu cocok dengan host.
+   - /app/node_modules
+  depends_on:
+   - server
+  networks:
+   - queueapp

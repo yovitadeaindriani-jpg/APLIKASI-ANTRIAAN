@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Struk Belanja</title>
+  <meta name="description" content="Membuat tampilan struk belanja">
+  <style>
+    table, td, th {
+      border: 1px solid #000;
+      border-collapse: collapse;
+      padding: 5px 5px;
+    }
+    table {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    td input {
+      width: 100%;
+      box-sizing: border-box;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <main id="mainContent">
+    <form>
+      <table>
+        <thead>
+          <tr>
+            <th width="5">No</th>
+            <th>Nama Buah</th>
+            <th width="70">Qty</th>
+            <th>Harga</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Tomat</td>
+            <td>
+              <input type="number" id="tomatQty">
+            </td>
+            <td>
+              <input type="number" id="tomatPrice">
+            </td>
+            <td>
+              <input type="number" id="tomatBayar" readonly>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Apel</td>
+            <td>
+              <input type="number" id="apelQty">
+            </td>
+            <td>
+              <input type="number" id="apelPrice">
+            </td>
+            <td>
+              <input type="number" id="apelBayar" readonly>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="4">Subtotal</th>
+            <th id="subtotal"></th>
+          </tr>
+          <tr>
+            <th colspan="4">Discount</th>
+            <th id="discount"></th>
+          </tr>
+          <tr>
+            <th colspan="4">Total Bayar </th>
+            <th id="totalBayar"></th>
+          </tr>
+        </tfoot>
+      </table>
+      <button id="btnHitung">Hitung</button>
+      <button type="reset" id="btnReset">Reset</button>
+    </form>
+  </main>
+
+  <script>
+    const btnHitung = document.getElementById("btnHitung");
+    btnHitung.addEventListener("click", function(e){
+      e.preventDefault();
+      prosesHitung();
+    });
+
+    function prosesHitung() {
+    const tomat_qty = Number(document.getElementById("tomatQty").value);
+    const tomat_price = Number(document.getElementById("tomatPrice").value);
+    const tomat_bayar = tomat_price * tomat_qty;
+
+    document.getElementById("tomatBayar").value = tomat_bayar;
+
+
+    const apel_qty = Number(document.getElementById("apelQty").value);
+    const apel_price = Number(document.getElementById("apelPrice").value);
+    const apel_bayar = apel_price * apel_qty;
+
+    document.getElementById("apelBayar").value = apel_bayar;
+
+
+    const subtotal = tomat_bayar + apel_bayar;
+
+    document.getElementById("subtotal").innerHTML = subtotal;
+
+
+    const qtyTotal = tomat_qty + apel_qty;
+
+
+    let discount = 0;
+
+    if (qtyTotal > 10 && subtotal >= 50000) {
+        discount = 7 / 100 * subtotal;
+    }
+
+
+    const totalBayar = subtotal - discount;
+
+    document.getElementById("discount").innerHTML = discount;
+    document.getElementById("totalBayar").innerHTML = totalBayar;
+}
+  </script>
+</body>
+</html>
