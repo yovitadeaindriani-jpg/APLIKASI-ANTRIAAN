@@ -1,0 +1,19 @@
+﻿# Dev server Vite untuk QueueApp
+services:
+  web:
+    image: node:20-bookworm-slim
+    container_name: queueapp-web
+    restart: unless-stopped
+    working_dir: /app
+    command: sh -c "[ -d node_modules/vite ] || npm ci --no-audit --no-fund; npm run dev -- --host 0.0.0.0"
+    ports:
+      - "${WEB_PORT:-5173}:5173"
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    networks:
+      - queueapp
+
+networks:
+  queueapp:
+    driver: bridge
