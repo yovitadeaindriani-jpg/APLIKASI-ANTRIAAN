@@ -1,75 +1,35 @@
-import { STATUS, emptyState } from "./queue.js";
-
-export default function AdminLogin({ onMasuk }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [galat, setGalat] = useState("");
-
-  const refEmail = useRef(null);
-  const refPassword = useRef(null);
-
-  function tanganiSubmit(event) {
-    event.preventDefault();
-
-    if (email.trim() === "") {
-      setGalat("Email wajib diisi.");
-      refEmail.current.focus();
-      return;
-    }
-
-    if (!refEmail.current.validity.valid) {
-      setGalat("Format email tidak valid.");
-      refEmail.current.focus();
-      return;
-    }
-
-    if (password === "") {
-      setGalat("Password wajib diisi.");
-      refPassword.current.focus();
-      return;
-    }
-
-    setGalat("");
-    onMasuk();
-  }
-
+/* =============================================================================
+AdminLoginPage — Masuk sebagai Petugas (/admin/login)
+=============================================================================
+Berhasil masuk berarti berpindah ke halaman dashboard, sama seperti
+Minggu 05. Belum ada kredensial yang diperiksa; autentikasi sungguhan
+adalah materi Minggu 13.
+Perpindahannya kini dikerjakan useNavigate, bukan window.location. Bedanya
+bukan gaya penulisan: window.location membuang seluruh aplikasi dan
+memuatnya lagi dari nol, sedangkan useNavigate hanya mengganti alamat dan
+isi halaman — cara yang sama dengan yang dipakai <Link>, tetapi dijalankan
+dari dalam kode alih-alih oleh klik pengguna.
+========================================================================== */
+import { useNavigate } from "react-router-dom";
+import Layout from "../components/Layout.jsx";
+import AdminLogin from "../components/AdminLogin.jsx";
+export default function AdminLoginPage() {
+  const navigasi = useNavigate();
   return (
-    <section>
-      <p>Halaman ini hanya untuk petugas.</p>
-
-      <form onSubmit={tanganiSubmit} noValidate>
-        <p role="alert">{galat}</p>
-
+    <Layout
+      judul="Masuk sebagai Petugas"
+      catatan="Minggu 07: form ini memeriksa kelengkapan isian, tetapi belum memeriksa kredensial
+      sama sekali. Autentikasi sungguhan ditambahkan pada Minggu 13."
+    >
+      <AdminLogin onMasuk={() => navigasi("/admin/dashboard")} />
+      <section aria-labelledby="judul-kesalahan">
+        <h2 id="judul-kesalahan">Tentang Pesan Kesalahan</h2>
         <p>
-          <label htmlFor="email">Email</label>
-          <input
-            ref={refEmail}
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setGalat("");
-            }}
-          />
+          Bila kredensial salah, sistem tidak memberi tahu bagian mana yang
+          keliru. Menyebutkan "email tidak terdaftar" akan memberitahu penyerang
+          bahwa email lainnya terdaftar.
         </p>
-
-        <p>
-          <label htmlFor="password">Password</label>
-          <input
-            ref={refPassword}
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setGalat("");
-            }}
-          />
-        </p>
-
-        <button type="submit">Masuk</button>
-      </form>
-    </section>
+      </section>
+    </Layout>
   );
 }
