@@ -1,113 +1,64 @@
-import { useRef, useState } from "react";
+import { useQueue } from "../useQueue.js";
+import { currentCalled, myQueue } from "../queue.js";
+import Layout from "../components/Layout.jsx";
+import QueueForm from "../components/QueueForm.jsx";
 
-export default function AdminLogin({ onMasuk }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [galat, setGalat] = useState(null);
+export default function TakeQueue() {
+  const { state, pesan, ambilNomor } = useQueue();
 
-  const refEmail = useRef(null);
-  const refPassword = useRef(null);
-
-  function tanganiSubmit(event) {
-    event.preventDefault();
-
-    const aturan = [
-      {
-        ref: refEmail,
-        salah: () => email.trim() === "",
-        pesan: "Email wajib diisi.",
-      },
-      {
-        ref: refEmail,
-        salah: () => refEmail.current.validity.typeMismatch,
-        pesan: "Format email tidak valid. Contoh: petugas@queueapp.test",
-      },
-      {
-        ref: refPassword,
-        salah: () => password === "",
-        pesan: "Password wajib diisi.",
-      },
-    ];
-
-    const ditemukan = aturan.find((a) => a.salah());
-
-    if (ditemukan) {
-      setGalat({
-        pesan: ditemukan.pesan,
-        ref: ditemukan.ref,
-      });
-
-      ditemukan.ref.current.focus();
-      return;
-    }
-
-    setGalat(null);
-    onMasuk();
-  }
-
-  const bersihkan = () => setGalat(null);
-
-  const ditandai = (ref) =>
-    galat?.ref === ref ? "true" : undefined;
+  const antreanSaya = myQueue(state);
+  const sedangDipanggil = currentCalled(state);
 
   return (
-    <>
-      <p>
-        Halaman ini hanya untuk petugas. Pengunjung tidak perlu masuk.
-      </p>
+    <Layout
+      judul="Ambil Nomor Antrean"
+      aktif="take-queue.html"
+      catatan="Ambil nomor antrean untuk mendapatkan giliran pelayanan."
+    >
+      {sedangDipanggil && (
+        <p>
+          Antrean yang sedang dipanggil:{" "}
+          <strong>{sedangDipanggil.queueNumber}</strong>
+        </p>
+      )}
 
-      <form onSubmit={tanganiSubmit} noValidate>
-        <fieldset>
-          <legend>Kredensial petugas</legend>
+      {!sedangDipanggil && (
+        <p>Belum ada antrean yang sedang dipanggil.</p>
+      )}
 
-          <p className="pesan-galat" role="alert">
-            {galat?.pesan ?? ""}
-          </p>
+      <div className="grid-antrean">
+        <QueueForm onAmbil={ambilNomor} />
 
-          <p>
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              autoComplete="username"
-              required
-              ref={refEmail}
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                bersihkan();
-              }}
-              aria-invalid={ditandai(refEmail)}
-              aria-describedby="bantuan-email"
-            />
+        <section className="kartu-antrean">
+          <h2>Nomor Antrean Anda</h2>
 
-            <span className="bantuan" id="bantuan-email">
-              Contoh: petugas@queueapp.test
-            </span>
-          </p>
+          {antreanSaya ? (
+            <>
+              <p className="nomor-antrean">
+                {antreanSaya.queueNumber}
+              </p>
+              <p>Status: {antreanSaya.status}</p>
+              <p>Simpan nomor ini.</p>
+            </>
+          ) : (
+            <p>Anda belum mengambil nomor antrean.</p>
+          )}
+        </section>
 
-          <p>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              autoComplete="current-password"
-              required
-              ref={refPassword}
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                bersihkan();
-              }}
-              aria-invalid={ditandai(refPassword)}
-            />
-          </p>
+        <section className="kartu-antrean">
+          <h2>Selanjutnya</h2>
+          <ol>
+            <li>Simpan atau catat nomor antrean Anda.</li>
+            <li>
+              Perhatikan halaman{" "}
+              <a href="index.html">Antrean Saat Ini</a>.
+            </li>
+            <li>Menuju loket ketika nomor Anda dipanggil.</li>
+          </ol>
+        </section>
+      </div>
 
-          <button type="submit">Masuk</button>
-        </fieldset>
-      </form>
-    </>
+      {pesan && <p role="alert">{pesan}</p>}
+    </Layout>
   );
 }

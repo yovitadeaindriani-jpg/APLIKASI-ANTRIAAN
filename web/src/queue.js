@@ -1,4 +1,4 @@
-export const STATUS = Object.freeze({
+﻿export const STATUS = Object.freeze({
   WAITING: "WAITING",
   CALLED: "CALLED",
   COMPLETED: "COMPLETED",
@@ -6,7 +6,7 @@ export const STATUS = Object.freeze({
 
 /* Transisi yang diizinkan. Selain yang terdaftar di sini, ditolak.
 
-        WAITING → CALLED → COMPLETED
+        WAITING â†’ CALLED â†’ COMPLETED
 
   COMPLETED tidak punya tujuan mana pun: antrean yang sudah selesai tidak
   bisa dikembalikan. */
@@ -21,9 +21,9 @@ const sekarang = () => new Date().toISOString();
 /* ---- Nomor antrean -------------------------------------------------------
    PRD 29: berurutan, mudah dibaca, tidak bentrok pada kondisi normal.
 
-     1 → A001 42 → A042 1234 → A1234
+     1 â†’ A001 42 â†’ A042 1234 â†’ A1234
 
-   Panjang digit tetap membuat nomor berbaris rapi di layar — pasangan dari
+   Panjang digit tetap membuat nomor berbaris rapi di layar â€” pasangan dari
    tabular-nums pada CSS Minggu 04. Lewat 999 nomor menjadi lebih panjang
    tetapi tetap benar; lebih baik lebih panjang daripada berulang. */
 
@@ -51,7 +51,7 @@ tempat, jadi tidak ada yang bisa dirusak. */
 export function currentCalled(state) {
   return state.queues.find((queue) => queue.status === STATUS.CALLED) ?? null;
 }
-/* Antrean WAITING tertua — yang akan dipanggil berikutnya (FR-06).
+/* Antrean WAITING tertua â€” yang akan dipanggil berikutnya (FR-06).
 Daftar selalu tersusun menurut waktu pembuatan, jadi yang pertama
 ditemukan sudah pasti yang tertua. */
 export function nextInLine(state) {
@@ -81,7 +81,7 @@ Setiap fungsi menerima state dan mengembalikan salah satu dari dua bentuk:
 Bentuk kedua sengaja menyerupai response galat pada PRD 31, supaya kode
 tampilan yang menanganinya sekarang tidak perlu ditulis ulang ketika
 sumber datanya berganti menjadi API pada Minggu 11.
-Perhatikan pada bentuk kegagalan tidak ada state baru — memang tidak ada
+Perhatikan pada bentuk kegagalan tidak ada state baru â€” memang tidak ada
 yang berubah. */
 
 export function takeQueue(state) {
@@ -100,7 +100,7 @@ export function takeQueue(state) {
     state: {
       lastNumber: angka,
       /* Selalu ditambahkan di akhir, sehingga daftar tetap tersusun menurut
-waktu pembuatan — urutan yang diandalkan nextInLine. */
+waktu pembuatan â€” urutan yang diandalkan nextInLine. */
       queues: [...state.queues, queue],
       myQueueId: queue.id,
     },
@@ -162,5 +162,20 @@ export function completeQueue(state, id) {
     ok: true,
     state: { ...state, queues },
     queue: queues.find((queue) => queue.id === id),
+  };
+}
+
+export function hapusAntreanA003(state) {
+  const queues = state.queues.filter(
+    (queue) => queue.queueNumber !== "A003"
+  );
+
+  return {
+    ...state,
+    queues,
+    myQueueId:
+      queues.some((queue) => queue.id === state.myQueueId)
+        ? state.myQueueId
+        : null,
   };
 }

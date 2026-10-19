@@ -139,19 +139,20 @@ meninggalkan garis fokus. */
 /* Tautan lompat. Disembunyikan dari pandangan, tetapi TIDAK dari pembaca
 layar, dan muncul kembali begitu menerima fokus keyboard.
 display:none akan menghilangkannya dari urutan fokus — justru merusak. */
-body > a[href="#konten-utama"] {
-  position: absolute;
-  left: var(--ruang-3);
-  top: var(--ruang-3);
-  z-index: 10;
-  padding: var(--ruang-2) var(--ruang-3);
-  background-color: var(--warna-permukaan);
-  border: 2px solid var(--warna-utama);
-  border-radius: var(--lengkung);
-  transform: translateY(-200%);
+body > a[href="#konten-utama"] 
+    .lewati {
+    position: absolute;
+    left: var(--ruang-3);
+    top: var(--ruang-3);
+    z-index: 10;
+    padding: var(--ruang-2) var(--ruang-3);
+    background-color: var(--warna-permukaan);
+    border: 2px solid var(--warna-utama);
+    border-radius: var(--lengkung);
+    transform: translateY(-200%);
 }
-body > a[href="#konten-utama"]:focus {
-  transform: translateY(0);
+.lewati:focus {
+transform: translateY(0);
 }
 
 header,
@@ -574,4 +575,36 @@ membuatnya tergulir tanpa alasan. */
   section[aria-labelledby="judul-daftar"] {
     flex-basis: 100%;
   }
+}
+
+
+/* Tampilan halaman Ambil Nomor */
+.grid-antrean {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--ruang-4);
+  margin-top: var(--ruang-4);
+}
+
+.grid-antrean > section {
+  flex: 1 1 15rem;
+  min-width: 0;
+  margin-top: 0;
+}
+
+.grid-antrean .kartu-antrean {
+  background-color: var(--warna-permukaan);
+  border: 1px solid var(--warna-garis);
+  border-radius: var(--lengkung);
+  padding: var(--ruang-4);
+}
+
+.grid-antrean h2 {
+  margin-bottom: var(--ruang-3);
+}
+
+.grid-antrean .nomor-antrean {
+  font-size: var(--teks-raksasa);
+  color: var(--warna-utama);
 }

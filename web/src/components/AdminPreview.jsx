@@ -31,8 +31,11 @@ export default function AdminPreview({
             onPanggil();
           }}
         >
-          <button type="submit" disabled={berikutnya === null}>
-            Panggil Antrean Berikutnya
+          <button
+              type="button"
+             onClick={onPanggil}
+              >
+              Panggil Antrean Berikutnya
           </button>
         </form>
 
