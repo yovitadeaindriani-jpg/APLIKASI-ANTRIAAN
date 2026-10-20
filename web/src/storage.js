@@ -1,6 +1,8 @@
-﻿import { STATUS, emptyState } from "./queue.js";
+﻿
+import { STATUS, emptyState } from "./queue.js";
 
-const KUNCI = "queueapp.prototype.v1";
+export const KUNCI_ANTREAN = "queueapp.antrean.v2";
+export const KUNCI_NOMOR_SAYA = "queueapp.nomor-saya.v2";
 
 function bentuknyaBenar(data) {
   return (
@@ -12,49 +14,55 @@ function bentuknyaBenar(data) {
       (queue) =>
         Number.isInteger(queue.id) &&
         typeof queue.queueNumber === "string" &&
-        Object.hasOwn(STATUS, queue.status),
+        Object.hasOwn(STATUS, queue.status)
     )
   );
 }
 
-function bersihkanA003(data) {
-  const queues = data.queues.filter(
-    (queue) => queue.queueNumber !== "A003",
-  );
-
-  return {
-    ...data,
-    queues,
-    myQueueId: queues.some(
-      (queue) => queue.id === data.myQueueId,
-    )
-      ? data.myQueueId
-      : null,
-  };
-}
-
-export function muat() {
+export function muatAntrean() {
   try {
-    const teks = localStorage.getItem(KUNCI);
+    const teks = localStorage.getItem(KUNCI_ANTREAN);
+
     if (!teks) return emptyState();
 
     const data = JSON.parse(teks);
+
     if (!bentuknyaBenar(data)) return emptyState();
 
-    const hasil = bersihkanA003(data);
-    localStorage.setItem(KUNCI, JSON.stringify(hasil));
-
-    return hasil;
+    return data;
   } catch {
     return emptyState();
   }
 }
 
-export function simpan(state) {
+export function simpanAntrean(state) {
   try {
-    localStorage.setItem(
-      KUNCI,
-      JSON.stringify(bersihkanA003(state)),
-    );
-  } catch {}
+    localStorage.setItem(KUNCI_ANTREAN, JSON.stringify(state));
+  } catch {
+    // Penyimpanan gagal, aplikasi tetap berjalan.
+  }
+}
+
+export function muatNomorSaya() {
+  try {
+    const teks = localStorage.getItem(KUNCI_NOMOR_SAYA);
+
+    if (!teks) return null;
+
+    return JSON.parse(teks);
+  } catch {
+    return null;
+  }
+}
+
+export function simpanNomorSaya(nomor) {
+  try {
+    if (nomor == null) {
+      localStorage.removeItem(KUNCI_NOMOR_SAYA);
+    } else {
+      localStorage.setItem(KUNCI_NOMOR_SAYA, JSON.stringify(nomor));
+    }
+  } catch {
+    // Penyimpanan gagal, aplikasi tetap berjalan.
+  }
 }
