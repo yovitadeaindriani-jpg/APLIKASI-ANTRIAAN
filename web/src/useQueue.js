@@ -1,91 +1,98 @@
-import { useState, useEffect } from "react";
+
+import { useState, useEffect, useCallback } from "react";
 import {
   emptyState,
   takeQueue,
   callNext,
   completeQueue,
-  hapusAntreanA003,
 } from "./queue.js";
-import { muat, simpan } from "./storage.js";
+import {
+  muatAntrean,
+  simpanAntrean,
+  muatNomorSaya,
+  simpanNomorSaya,
+} from "./storage.js";
 
 export function useQueue() {
-  const [muatan, setMuatan] = useState({
-    status: "memuat",
-    antrean: [],
-    galat: null,
+  const [state, setState] = useState(() => {
+    const data = muatAntrean();
+    return data ?? emptyState();
   });
-  /* Galat dari aksi terakhir, dan penanda bahwa sebuah aksi masih berjalan.
-Yang kedua dipakai untuk mematikan tombol supaya satu klik tidak terkirim
-dua kali. */
+
+  const [nomorSaya, setNomorSaya] = useState(() => muatNomorSaya());
   const [pesan, setPesan] = useState("");
   const [sibuk, setSibuk] = useState(false);
-  /* Nomor milik pengunjung ini disimpan sebagai id saja. Isinya yang lengkap
-— status, jam dipanggil — selalu diambil dari daftar terbaru, sehingga
-tidak mungkin basi. */
-  const [idSaya, setIdSaya] = useState(muatNomorSaya);
-  /* useCallback membuat fungsi ini tetap sama di antara render, sehingga
-useEffect di bawahnya tidak menganggapnya berubah setiap kali. */
-  const muatUlang = useCallback(async () => {
-    setMuatan((sebelum) => ({ ...sebelum, status: "memuat" }));
-    try {
-      const antrean = await ambilDaftarAntrean();
-      setMuatan({ status: "siap", antrean, galat: null });
-    } catch (galat) {
-      setMuatan({ status: "galat", antrean: [], galat });
-    }
-  }, []);
+
   useEffect(() => {
-    muatUlang();
-  }, [muatUlang]);
+    simpanAntrean(state);
+  }, [state]);
+
+  const jalankan = useCallback(
+    async (aksi) => {
+      setSibuk(true);
+      setPesan("");
+
+      let hasil = null;
+
+      try {
+        hasil = aksi(state);
+
+        if (!hasil.ok) {
+          setPesan(hasil.message);
+          return null;
+        }
+
+        setState(hasil.state);
+      } catch (galat) {
+        setPesan(galat.message);
+        return null;
+      } finally {
+        setSibuk(false);
+      }
+
+      return hasil;
+    },
+    [state],
+  );
+
+  const ambilNomor = useCallback(async () => {
+    const dibuat = await jalankan(takeQueue);
+
+    if (!dibuat) return;
+
+    setNomorSaya(dibuat.queue.id);
+    simpanNomorSaya(dibuat.queue.id);
+  }, [jalankan]);
+
+  const panggilBerikutnya = useCallback(async () => {
+    await jalankan(callNext);
+  }, [jalankan]);
+
+  const selesaikan = useCallback(async (id) => {
+    await jalankan((data) => completeQueue(data, id));
+  }, [jalankan]);
+
+  const muatUlang = useCallback(() => {
+    const data = muatAntrean();
+
+    setState(data ?? emptyState());
+    setNomorSaya(muatNomorSaya());
+    setPesan("");
+  }, []);
 
   return {
-    state: app.data,
-    pesan: app.pesan,
-    ambilNomor: () => jalankan(takeQueue),
-    panggilBerikutnya: () => jalankan(callNext),
-    selesaikan: (id) => jalankan((data) => completeQueue(data, id)),
+    status: "siap",
+    antrean: state.queues,
+    galat: null,
+    nomorSaya:
+      nomorSaya === null
+        ? null
+        : state.queues.find((queue) => queue.id === nomorSaya) ?? null,
+    pesan,
+    sibuk,
+    muatUlang,
+    ambilNomor,
+    panggilBerikutnya,
+    selesaikan,
   };
 }
-/* Setiap aksi mengikuti alur yang sama: kirim, lalu ambil ulang daftarnya.
-Mengambil ulang — dan bukan menambal daftar di layar sendiri — adalah
-kebiasaan yang benar begitu datanya dimiliki server: yang ditampilkan
-selalu apa yang benar-benar tersimpan, bukan tebakan.
-Perhatikan daftarnya diperbarui TANPA melewati status "memuat" lagi.
-Mengosongkan layar sesaat setiap kali tombol ditekan membuat halaman
-berkedip padahal datanya sudah ada. */
-async function jalankan(aksi) {
-  setSibuk(true);
-  setPesan("");
-  try {
-    const antrean = await aksi();
-    setMuatan({
-      status: "siap",
-      antrean: await ambilDaftarAntrean(),
-      galat: null,
-    });
-    return antrean;
-  } catch (galat) {
-    setPesan(galat.message);
-    return null;
-  } finally {
-    setSibuk(false);
-  }
-}
-async function ambilNomor() {
-  const dibuat = await jalankan(() => buatAntrean());
-  if (!dibuat) return;
-  setIdSaya(dibuat.id);
-  simpanNomorSaya(dibuat.id);
-}
-return {
-  status: muatan.status,
-  antrean: muatan.antrean,
-  galat: muatan.galat,
-  nomorSaya: idSaya === null ? null : findQueue(muatan.antrean, idSaya),
-  pesan,
-  sibuk,
-  muatUlang,
-  ambilNomor,
-  panggilBerikutnya: () => jalankan(() => panggilAntreanBerikutnya()),
-  selesaikan: (id) => jalankan(() => selesaikanAntrean(id)),
-};
