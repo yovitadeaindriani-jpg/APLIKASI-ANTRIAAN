@@ -1,4 +1,4 @@
-import { STATUS } from "../queue.js";
+
 import { formatJam } from "../format.js";
 
 function SelWaktu({ iso }) {
@@ -11,7 +11,7 @@ function SelWaktu({ iso }) {
   );
 }
 
-export default function QueueTable({ antrean, onSelesaikan }) {
+export default function QueueTable({ antrean, sibuk, onSelesaikan }) {
   return (
     <section id="daftar-antrean" aria-labelledby="judul-daftar">
       <h2 id="judul-daftar">Daftar Antrean</h2>
@@ -45,20 +45,18 @@ export default function QueueTable({ antrean, onSelesaikan }) {
               antrean.map((baris) => (
                 <tr key={baris.id}>
                   <th scope="row">{baris.queueNumber}</th>
-                  <td>{baris.status}</td>
+                  <td data-status={baris.status}>{baris.status}</td>
                   <SelWaktu iso={baris.createdAt} />
                   <SelWaktu iso={baris.calledAt} />
                   <SelWaktu iso={baris.completedAt} />
-
                   <td>
-                    {baris.status === STATUS.CALLED && (
-                      <button
-                        type="button"
-                        onClick={() => onSelesaikan(baris.id)}
-                      >
-                        Selesaikan
-                      </button>
-                    )}
+                    <button
+                      type="button"
+                      disabled={sibuk}
+                      onClick={() => onSelesaikan(baris.id)}
+                    >
+                      Selesaikan
+                    </button>
                   </td>
                 </tr>
               ))
