@@ -3,28 +3,35 @@ import { currentCalled, myQueue } from "../queue.js";
 import Layout from "../components/Layout.jsx";
 import QueueForm from "../components/QueueForm.jsx";
 
-export default function TakeQueue() {
-  const { state, pesan, ambilNomor } = useQueue();
-
-  const antreanSaya = myQueue(state);
-  const sedangDipanggil = currentCalled(state);
-
+export default function TakeQueuePage({
+  status,
+  galat,
+  antrean,
+  nomorSaya,
+  pesan,
+  sibuk,
+  onAmbil,
+  onMuatUlang,
+}) {
+  const dipanggil = currentCalled(antrean);
   return (
     <Layout
       judul="Ambil Nomor Antrean"
-      aktif="take-queue.html"
-      catatan="Ambil nomor antrean untuk mendapatkan giliran pelayanan."
+      catatan="Minggu 07: routing dan lapisan data. Nomor dibuat di peramban ini dan belum dikirim ke
+      mana pun."
     >
-      {sedangDipanggil && (
+      <DataState status={status} galat={galat} onCobaLagi={onMuatUlang}>
         <p>
-          Antrean yang sedang dipanggil:{" "}
-          <strong>{sedangDipanggil.queueNumber}</strong>
+          {dipanggil
+            ? `Antrean saat ini sudah sampai ${dipanggil.queueNumber}, dengan
+            ${waitingQueues(antrean).length} antrean menunggu.`
+            : "Belum ada antrean yang sedang dipanggil."}
         </p>
-      )}
-
-      {!sedangDipanggil && (
-        <p>Belum ada antrean yang sedang dipanggil.</p>
-      )}
+        {/* Halaman tidak mengambil nomor sendiri; ia meneruskan permintaan
+        itu ke atas lewat callback yang diterimanya dari App. */}
+        <QueueForm onAmbil={onAmbil} sibuk={sibuk} pesan={pesan} />
+        <QueueStatus antrean={nomorSaya} />
+      </DataState>
 
       <div className="grid-antrean">
         <QueueForm onAmbil={ambilNomor} />
@@ -34,9 +41,7 @@ export default function TakeQueue() {
 
           {antreanSaya ? (
             <>
-              <p className="nomor-antrean">
-                {antreanSaya.queueNumber}
-              </p>
+              <p className="nomor-antrean">{antreanSaya.queueNumber}</p>
               <p>Status: {antreanSaya.status}</p>
               <p>Simpan nomor ini.</p>
             </>
@@ -50,8 +55,7 @@ export default function TakeQueue() {
           <ol>
             <li>Simpan atau catat nomor antrean Anda.</li>
             <li>
-              Perhatikan halaman{" "}
-              <a href="index.html">Antrean Saat Ini</a>.
+              Perhatikan halaman <a href="index.html">Antrean Saat Ini</a>.
             </li>
             <li>Menuju loket ketika nomor Anda dipanggil.</li>
           </ol>

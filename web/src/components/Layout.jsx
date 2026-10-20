@@ -1,22 +1,21 @@
 const HALAMAN_PENGUNJUNG = [
-  { url: "index.html", label: "Antrean Saat Ini" },
-  { url: "take-queue.html", label: "Ambil Nomor" },
-  { url: "admin-login.html", label: "Masuk sebagai Petugas" },
+  { to: "/", label: "Antrean Saat Ini" },
+  { to: "/queue", label: "Ambil Nomor" },
+  { to: "/admin/login", label: "Masuk sebagai Petugas" },
 ];
 const HALAMAN_PETUGAS = [
-  { url: "index.html", label: "Antrean Saat Ini" },
-  { url: "take-queue.html", label: "Ambil Nomor" },
-  { url: "admin-dashboard.html", label: "Dashboard Petugas" },
-  { url: "admin-login.html", label: "Keluar" },
+  { to: "/", label: "Antrean Saat Ini" },
+  { to: "/queue", label: "Ambil Nomor" },
+  { to: "/admin/dashboard", label: "Dashboard Petugas" },
+  { to: "/admin/login", label: "Keluar" },
 ];
-export default function Layout({
-  judul,
-  aktif,
-  petugas = false,
-  catatan,
-  children,
-}) {
+export default function Layout({ judul, petugas = false, catatan, children }) {
   const halaman = petugas ? HALAMAN_PETUGAS : HALAMAN_PENGUNJUNG;
+  /* Judul dokumen adalah hal pertama yang dibacakan pembaca layar dan satusatunya penanda pada daftar tab peramban. Satu dokumen untuk empat
+halaman berarti judulnya harus diganti setiap kali halamannya berganti. */
+  useEffect(() => {
+    document.title = `${judul} — QueueApp`;
+  }, [judul]);
   return (
     <>
       <a className="lewati" href="#konten-utama">
@@ -29,23 +28,26 @@ export default function Layout({
         <nav aria-label="Navigasi utama">
           <ul>
             {halaman.map((item) => (
-              <li key={item.url}>
-                <a
-                  href={item.url}
-                  /* aria-current menandai halaman yang sedang dibuka, dan
-CSS Minggu 04 memakai penanda itu untuk menebalkannya.
-undefined membuat atributnya tidak ditulis sama sekali;
-false akan ditulis sebagai aria-current="false". */
-                  aria-current={item.url === aktif ? "page" : undefined}
-                >
+              <li key={item.to}>
+                {/* NavLink adalah tautan biasa yang tahu alamat mana yang
+sedang dibuka. Ia memasang sendiri aria-current="page"
+pada tautan yang cocok — penanda yang sama yang dipakai
+CSS Minggu 04 untuk menebalkannya, dan yang pada Minggu 06
+masih dihitung manual lewat prop "aktif".
+end membatasi kecocokan "/" pada alamat itu saja; tanpanya
+"/" dianggap cocok dengan semua alamat, karena semuanya
+diawali garis miring. */}
+                <NavLink to={item.to} end>
                   {item.label}
-                </a>
+                </NavLink>
               </li>
             ))}
           </ul>
         </nav>
       </header>
-      <main id="konten-utama">
+      {/* tabIndex={-1} membuat elemen dapat menerima fokus lewat kode dan
+lewat tautan lompat, tetapi tidak ikut dalam urutan Tab. */}
+      <main id="konten-utama" tabIndex={-1}>
         <h1>{judul}</h1>
         {children}
       </main>
