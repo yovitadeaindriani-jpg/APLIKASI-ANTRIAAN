@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useQueue } from "./useQueue.js";
 import HomePage from "./pages/HomePage.jsx";
-import TakeQueuePage from "./pages/TakeQueuePage.jsx";
+import TakeQueuePage from "./pages/TakeQueue.jsx";
 import AdminLoginPage from "./pages/AdminLoginPage.jsx";
 import AdminDashboardPage from "./pages/AdminDashboardPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";

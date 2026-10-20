@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { NavLink } from "react-router-dom";
 const HALAMAN_PENGUNJUNG = [
   { to: "/", label: "Antrean Saat Ini" },
   { to: "/queue", label: "Ambil Nomor" },
