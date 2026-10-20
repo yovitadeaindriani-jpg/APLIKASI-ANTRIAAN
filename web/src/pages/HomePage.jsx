@@ -1,5 +1,4 @@
-import { useQueue } from "../useQueue.js";
-import { currentCalled, waitingQueues, myQueue } from "../queue.js";
+import { currentCalled, waitingQueues } from "../queue.js";
 import Layout from "../components/Layout.jsx";
 import QueueDisplay from "../components/QueueDisplay.jsx";
 import QueueStatus from "../components/QueueStatus.jsx";
@@ -12,21 +11,35 @@ export default function HomePage({
   nomorSaya,
   onMuatUlang,
 }) {
+  const state = {
+    queues: antrean ?? [],
+  };
+
   return (
     <Layout
       judul="Antrean Saat Ini"
-      catatan="Minggu 07: routing dan lapisan data. Data antrean masih hidup di peramban ini — belum
-ada API maupun database."
+      catatan="Minggu 08: checkpoint Web MVP. Seluruh alur antrean berjalan, tetapi datanya masih
+      hidup di peramban ini — belum ada API maupun database."
     >
-      <DataState status={status} galat={galat} onCobaLagi={onMuatUlang}>
-        <QueueDisplay
-          dipanggil={currentCalled(antrean)}
-          menunggu={waitingQueues(antrean)}
-        />
-        <QueueStatus antrean={nomorSaya} tautanAmbil />
-      </DataState>
-      {/* Keterangan status tidak bergantung pada data, jadi ia tetap terbaca
-walaupun antreannya gagal dimuat. */}
+      {status === "memuat" ? (
+        <p>Memuat data antrean...</p>
+      ) : status === "galat" ? (
+        <section>
+          <p role="alert">{galat?.message ?? "Data antrean gagal dimuat."}</p>
+          <button type="button" onClick={onMuatUlang}>
+            Coba Lagi
+          </button>
+        </section>
+      ) : (
+        <>
+          <QueueDisplay
+            dipanggil={currentCalled(state)}
+            menunggu={waitingQueues(state)}
+          />
+          <QueueStatus antrean={nomorSaya} tautanAmbil />
+        </>
+      )}
+
       <StatusLegend />
     </Layout>
   );
