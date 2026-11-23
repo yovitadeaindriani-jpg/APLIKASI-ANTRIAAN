@@ -1,19 +1,45 @@
 ﻿services:
+# --------------------------------------------------------------------------
+# Database. Sejak Minggu 10 punya schema dan data awal.
+#
   mysql:
     image: mysql:8.0
     container_name: queueapp-mysql
     restart: unless-stopped
+
     environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+
     ports:
+      # host:container — port host dibuat berbeda agar tidak bentrok
+      # dengan MySQL yang mungkin sudah terpasang di komputer sendiri.
       - "${DB_HOST_PORT}:3306"
+
     volumes:
+      # Named volume: data tetap ada walaupun container dihapus.
+      # Inilah yang membuat data antrean bertahan melewati `docker compose down`.
       - mysql_data:/var/lib/mysql
+      # Berkas .sql dijalankan MySQL menurut urutan abjad,
+      # hanya ketika volume datanya masih kosong.
+      - ./database:/docker-entrypoint-initdb.d:ro
+      # MySQL harus siap menerima koneksi sebelum server dijalankan.
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
     networks:
       - queueapp
+
+  # --------------------------------------------------------------------------
+  # Backend Express
+  # --------------------------------------------------------------------------
 
   server:
     image: node:20-alpine
@@ -36,7 +62,8 @@
              { npm ci --no-audit --no-fund && cp package-lock.json node_modules/.terpasang; };
              npm run dev"
     depends_on:
-      - mysql
+      - mysql:
+        condition: service_healthy
     volumes:
       - ./server:/app
       - /app/node_modules
