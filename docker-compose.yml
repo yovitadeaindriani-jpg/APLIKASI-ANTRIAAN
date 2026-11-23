@@ -1,24 +1,68 @@
-﻿
-# Dev server Vite untuk QueueApp
-services:
+﻿services:
+  mysql:
+    image: mysql:8.0
+    container_name: queueapp-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    ports:
+      - "${DB_HOST_PORT}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - queueapp
+
+  server:
+    image: node:20-alpine
+    container_name: queueapp-server
+    restart: unless-stopped
+    working_dir: /app
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "${SERVER_PORT}:${PORT}"
+    command: >
+      sh -c "cmp -s package-lock.json node_modules/.terpasang ||
+             { npm ci --no-audit --no-fund && cp package-lock.json node_modules/.terpasang; };
+             npm run dev"
+    depends_on:
+      - mysql
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    networks:
+      - queueapp
+
   web:
     image: node:20-bookworm-slim
     container_name: queueapp-web
     restart: unless-stopped
     working_dir: /app
-    command: >
-      sh -c "if ! cmp -s package-lock.json node_modules/.terpasang; then
-        npm ci --no-audit --no-fund &&
-        cp package-lock.json node_modules/.terpasang;
-      fi;
-      npm run dev -- --host 0.0.0.0"
+    environment:
+      NODE_ENV: development
     ports:
-      - "${WEB_PORT:-5173}:5173"
+      - "${WEB_PORT}:5173"
     volumes:
       - ./web:/app
       - /app/node_modules
+    command: sh -c "npm install --no-audit --no-fund && npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - server
     networks:
       - queueapp
+
+volumes:
+  mysql_data:
 
 networks:
   queueapp:
