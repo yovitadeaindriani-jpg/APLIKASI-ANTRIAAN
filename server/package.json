@@ -1,14 +1,15 @@
 {
-  "name": "queueapp-server",
-  "private": true,
-  "version": "0.9.0",
-  "type": "module",
-  "main": "src/server.js",
-  "scripts": {
-    "start": "node src/server.js",
-    "dev": "node --watch src/server.js"
-  },
-  "dependencies": {
-    "express": "^5.1.0"
-  }
+"name": "queueapp-server",
+"private": true,
+"version": "0.9.0",
+"type": "module",
+"main": "src/server.js",
+"scripts": {
+"start": "node src/server.js",
+"dev": "node --watch src/server.js"
+},
+"dependencies": {
+"express": "^5.1.0",
+"mysql2": "^3.24.3"
+}
 }
